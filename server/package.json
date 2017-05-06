@@ -1,0 +1,21 @@
+{
+  "name": "Who-Deleted-Me",
+  "preferGlobal": true,
+  "version": "0.0.1",
+  "author": "Javier Murillo <jmurillo93@gmail.com>",
+  "description": "Simple WebApp using the Steam Web API",
+  "license": "MIT",
+  "engines": {
+    "node": "6.10.3"
+  },
+  "scripts": {
+    "start": "node ./server.js"
+  },
+  "dependencies": {
+    "express": "^4.15.2",
+    "express-session": "^1.15.2",
+    "passport": "^0.3.2",
+    "passport-steam": "^1.0.8",
+    "serve-static": "^1.12.2"
+  }
+}

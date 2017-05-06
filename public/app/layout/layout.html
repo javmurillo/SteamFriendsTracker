@@ -1,0 +1,18 @@
+<style>
+  body {
+  padding-top: 100px;
+  }
+</style>
+<div ng-controller="LayoutController as vm">
+    <header class="clearfix">
+        <navbar navline="vm.navline"></navbar>
+    </header>
+    <section id="content" class="content">
+        <div class="container">
+            <div class="row">
+                <ui-view>
+                </ui-view>
+            </div>
+        </div>
+    </section>
+</div>
