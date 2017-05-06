@@ -8,9 +8,10 @@
             'ngAnimate',
             'angular-loading-bar',
             'app.home',
-            'app.layout'])
+            'app.layout',
+            'app.layout.navbar'])
         .config(function ($stateProvider, $urlRouterProvider, $logProvider, $locationProvider) {
-            $logProvider.debugEnabled(false);
+            $logProvider.debugEnabled(true);
             $locationProvider.html5Mode(true);
             $urlRouterProvider.otherwise('/');
             $stateProvider
@@ -20,5 +21,7 @@
                     controller: 'HomeController as vm'
                 });
         });
+
+
 
 })();

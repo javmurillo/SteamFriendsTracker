@@ -8,7 +8,7 @@
     function navbar() {
         var directive = {
             bindToController: true,
-            controller: NavbarController,
+            controller: 'NavbarController',
             controllerAs: 'vm',
             restrict: 'EA',
             scope: {
@@ -16,13 +16,6 @@
             },
             templateUrl: 'app/layout/navbar/navbar.html'
         };
-
-        NavbarController.$inject = ['$scope','$state'];
-
-        function NavbarController($scope,$state) {
-
-        }
-
         return directive;
     }
 })();

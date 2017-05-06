@@ -3,6 +3,7 @@ var express = require('express')
   , util = require('util')
   , session = require('express-session')
   , serveStatic = require('serve-static')
+  , keys = require('./config/keys')
   , SteamStrategy = require('passport-steam').Strategy;
 
   // Passport session setup.
@@ -25,9 +26,10 @@ var express = require('express')
   //   credentials (in this case, an OpenID identifier and profile), and invoke a
   //   callback with a user object.
   passport.use(new SteamStrategy({
+
       returnURL: 'http://localhost:3000/auth/steam/return',
       realm: 'http://localhost:3000/',
-      apiKey: 'Your API key here'
+      apiKey: keys.STEAM_APIKEY
     },
     function(identifier, profile, done) {
       // asynchronous verification, for effect...
@@ -58,37 +60,38 @@ var express = require('express')
   app.use(express.static(__dirname + '/public'));
   app.use(serveStatic('D:/GitProjects/steam-whodeletedme/public'))
 
-  app.all('/*', function(req, res, next) {
-    // Just send the index.html for other files to support HTML5Mode
-    res.sendFile('index.html', { root: 'D:/GitProjects/steam-whodeletedme/public' });
-  });
-
-  app.get('/logout', function(req, res){
-    req.logout();
-    res.redirect('/');
-  });
-
   // GET /auth/steam
   //   Use passport.authenticate() as route middleware to authenticate the
   //   request.  The first step in Steam authentication will involve redirecting
   //   the user to steamcommunity.com.  After authenticating, Steam will redirect the
   //   user back to this application at /auth/steam/return
   app.get('/auth/steam',
-    passport.authenticate('steam', { failureRedirect: '/' }),
+    passport.authenticate('steam', { failureRedirect: '/' },
     function(req, res) {
+      res.redirect('/');
+    }));
+
+  app.get('/logout', function(req, res){
+      req.logout();
       res.redirect('/');
     });
 
-  // GET /auth/steam/return
-  //   Use passport.authenticate() as route middleware to authenticate the
-  //   request.  If authentication fails, the user will be redirected back to the
-  //   login page.  Otherwise, the primary route function function will be called,
-  //   which, in this example, will redirect the user to the home page.
+    // GET /auth/steam/return
+    //   Use passport.authenticate() as route middleware to authenticate the
+    //   request.  If authentication fails, the user will be redirected back to the
+    //   login page.  Otherwise, the primary route function function will be called,
+    //   which, in this example, will redirect the user to the home page.
   app.get('/auth/steam/return',
-    passport.authenticate('steam', { failureRedirect: '/' }),
-    function(req, res) {
-      res.redirect('/');
-    });
+      passport.authenticate('steam', { failureRedirect: '/' }),
+      function(req, res) {
+        res.redirect('/');
+  });
+
+  app.all('/*', function(req, res, next) {
+    // Just send the index.html for other files to support HTML5Mode
+    res.sendFile('index.html', { root: 'D:/GitProjects/steam-whodeletedme/public' });
+  });
+
 
   app.listen(3000);
 
