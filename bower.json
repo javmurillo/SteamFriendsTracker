@@ -1,7 +1,6 @@
 {
-  "name": "Who-Deleted-Me",
+  "name": "who-deleted-me",
   "version": "0.0.1",
-  "appPath": "/public/",
   "devDependencies": {},
   "dependencies": {
     "angular": "~1.6.3",

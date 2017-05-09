@@ -34,7 +34,12 @@
         </li>
       </ul>
       <div class="navbar-form navbar-right">
-          <img src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png" ng-click="login()">
+          <img src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png" ng-click="vm.loginRedirect()" ng-if=!vm.isLogged()>
+          <div ng-if=vm.isLogged()>
+              <label style="color:white;">{{vm.userLogged().displayName}}</label>
+              <label style="color:white; font-size:8px">{{vm.userLogged().id}}</label>
+              <img ng-src="{{vm.userLogged().photos[0].value}}" alt="Description" />
+          </div>
       </div>
 
     </div>

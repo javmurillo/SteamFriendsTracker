@@ -8,7 +8,7 @@
     function navbar() {
         var directive = {
             bindToController: true,
-            controller: 'NavbarController',
+            controller: NavbarController,
             controllerAs: 'vm',
             restrict: 'EA',
             scope: {
@@ -16,6 +16,36 @@
             },
             templateUrl: 'app/layout/navbar/navbar.html'
         };
+
+        NavbarController.$inject = ['$scope','$state','LoginService'];
+
+        function NavbarController($scope,$state,LoginService) {
+            //console.log("Navbar controller called!");
+            var vm = this;
+
+            vm.loginRedirect = loginRedirect;
+            vm.isLogged = isLogged;
+            vm.userLogged = userLogged;
+
+
+
+            function loginRedirect() {
+              LoginService.loginRedirect();
+            }
+
+            function isLogged(){
+                return LoginService.isLogged();
+            }
+
+            function userLogged() {
+
+                return LoginService.userLogged();
+            }
+
+            var user = LoginService.userLogged();
+          console.log(user);
+
+        }
         return directive;
     }
 })();

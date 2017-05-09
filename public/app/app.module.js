@@ -21,7 +21,4 @@
                     controller: 'HomeController as vm'
                 });
         });
-
-
-
 })();

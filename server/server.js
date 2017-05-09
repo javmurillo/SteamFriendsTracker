@@ -49,7 +49,8 @@ var express = require('express')
 
   app.use(session({
       secret: 'your secret',
-      name: 'name of session id',
+      name: 'id',
+      user: 'username',
       resave: true,
       saveUninitialized: true}));
 
@@ -76,6 +77,10 @@ var express = require('express')
       res.redirect('/');
     });
 
+  app.get('/api/identity', ensureAuthenticated, function(req, res){
+      res.status(200).send(req.user);
+  });
+
     // GET /auth/steam/return
     //   Use passport.authenticate() as route middleware to authenticate the
     //   request.  If authentication fails, the user will be redirected back to the
@@ -88,6 +93,9 @@ var express = require('express')
   });
 
   app.all('/*', function(req, res, next) {
+    console.log(req.user);
+    req.session.user = req.user;
+    console.log(req.session.user);
     // Just send the index.html for other files to support HTML5Mode
     res.sendFile('index.html', { root: 'D:/GitProjects/steam-whodeletedme/public' });
   });
@@ -102,5 +110,5 @@ var express = require('express')
   //   login page.
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
-    res.redirect('/');
+    else res.sendStatus(401);
   }
