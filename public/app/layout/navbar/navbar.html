@@ -1,48 +1,46 @@
 <style>
-  [ng-click],
-  [data-ng-click],
-  [x-ng-click] {
-    cursor: pointer;
-  }
-  </style>
+   [ng-click],
+   [data-ng-click],
+   [x-ng-click] {
+   cursor: pointer;
+   }
+</style>
 <nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-items-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a ui-sref="home" class="navbar-brand">{{vm.navline.title}}</a>
-    </div>
-
-<center>
-    <div class="collapse navbar-collapse" id="navbar-collapse-items-1">
-      <ul class="nav navbar-nav">
-        <li>
-            <a ui-sref="home" id="home">
-                <span class="glyphicon glyphicon-home"></span>&nbsp;
-                <span>Home</span>
-            </a>
-        </li>
-        <li>
-            <a ui-sref="about" id="about">
-                <span class="glyphicon glyphicon-question-sign"></span>&nbsp;
-                <span>About</span>
-            </a>
-        </li>
-      </ul>
-      <div class="navbar-form navbar-right">
-          <img src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png" ng-click="vm.loginRedirect()" ng-if=!vm.isLogged()>
-          <div ng-if=vm.isLogged()>
-              <label style="color:white;">{{vm.userLogged().displayName}}</label>
-              <label style="color:white; font-size:8px">{{vm.userLogged().id}}</label>
-              <img ng-src="{{vm.userLogged().photos[0].value}}" alt="Description" />
-          </div>
+   <div class="container">
+      <div class="navbar-header">
+         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-items-1">
+         <span class="sr-only">Toggle navigation</span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         </button>
+         <a ui-sref="home" class="navbar-brand">{{vm.navline.title}}</a>
       </div>
-
-    </div>
-  </center>
-  </div>
+      <center>
+         <div class="collapse navbar-collapse" id="navbar-collapse-items-1">
+            <ul class="nav navbar-nav">
+               <li>
+                  <a ui-sref="home" id="home">
+                  <span class="glyphicon glyphicon-home"></span>&nbsp;
+                  <span>Home</span>
+                  </a>
+               </li>
+               <li>
+                  <a ui-sref="about" id="about">
+                  <span class="glyphicon glyphicon-question-sign"></span>&nbsp;
+                  <span>About</span>
+                  </a>
+               </li>
+            </ul>
+            <div class="navbar-form navbar-right">
+               <img src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png" ng-click="vm.loginRedirect()" ng-if=!vm.isLogged()>
+               <div ng-if=vm.isLogged()>
+                  <label style="color:white;">{{vm.user.displayName}}</label>
+                  <label style="color:white; font-size:8px">{{vm.user.id}}</label>
+                  <img ng-src="{{vm.userLogged().photos[0].value}}" alt="Description" />
+               </div>
+            </div>
+         </div>
+      </center>
+   </div>
 </nav>

@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     angular
@@ -9,8 +9,9 @@
             'angular-loading-bar',
             'app.home',
             'app.layout',
-            'app.layout.navbar'])
-        .config(function ($stateProvider, $urlRouterProvider, $logProvider, $locationProvider) {
+            'app.layout.navbar'
+        ])
+        .config(function($stateProvider, $urlRouterProvider, $logProvider, $locationProvider) {
             $logProvider.debugEnabled(true);
             $locationProvider.html5Mode(true);
             $urlRouterProvider.otherwise('/');
@@ -18,7 +19,13 @@
                 .state('home', {
                     url: '/',
                     templateUrl: 'app/home/home.html',
-                    controller: 'HomeController as vm'
+                    controller: 'HomeController as vm',
+                    resolve: {
+                        'LoginData': function(LoginService) {
+                            LoginService.promise;
+                        }
+                    }
+
                 });
         });
 })();
