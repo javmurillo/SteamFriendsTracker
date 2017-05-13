@@ -73,6 +73,7 @@ var express = require('express')
     }));
 
   app.get('/logout', function(req, res){
+    console.log("User logged out.");
       req.logout();
       res.redirect('/');
     });
@@ -93,9 +94,6 @@ var express = require('express')
   });
 
   app.all('/*', function(req, res, next) {
-    console.log(req.user);
-    req.session.user = req.user;
-    console.log(req.session.user);
     // Just send the index.html for other files to support HTML5Mode
     res.sendFile('index.html', { root: 'D:/GitProjects/steam-whodeletedme/public' });
   });
@@ -109,6 +107,7 @@ var express = require('express')
   //   the request will proceed.  Otherwise, the user will be redirected to the
   //   login page.
   function ensureAuthenticated(req, res, next) {
+    console.log("ensureAuthenticated");
     if (req.isAuthenticated()) { return next(); }
     else res.sendStatus(401);
   }

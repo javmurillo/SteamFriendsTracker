@@ -17,22 +17,28 @@
             templateUrl: 'app/layout/navbar/navbar.html'
         };
 
-        NavbarController.$inject = ['$scope', '$state', 'LoginService'];
+        NavbarController.$inject = ['LoginService'];
 
-        function NavbarController($scope, $state, LoginService) {
+        function NavbarController(LoginService) {
             //console.log("Navbar controller called!");
             var vm = this;
 
             vm.loginRedirect = loginRedirect;
+            vm.logoutRedirect = logoutRedirect;
             vm.isLogged = isLogged;
             vm.userLogged = userLogged;
 
             if (isLogged()) {
                 vm.user = userLogged();
+                console.log(vm.user);
             }
 
             function loginRedirect() {
                 return LoginService.loginRedirect();
+            }
+
+            function logoutRedirect() {
+                return LoginService.logoutRedirect();
             }
 
             function isLogged() {
