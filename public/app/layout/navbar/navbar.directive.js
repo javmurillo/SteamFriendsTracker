@@ -30,7 +30,6 @@
 
             if (isLogged()) {
                 vm.user = userLogged();
-                console.log(vm.user);
             }
 
             function loginRedirect() {
