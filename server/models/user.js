@@ -4,9 +4,18 @@ var Schema = mongoose.Schema;
 // create the schema
 var userSchema = new Schema({
     steamid: {
-        type: Number,
+        type: String,
         required: true,
         unique: true
+    },
+    displayName: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    photos: {
+        type: Object,
+        required: true,
     },
     friendslist: {
         type: Object,
