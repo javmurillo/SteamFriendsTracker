@@ -9,21 +9,16 @@ var userSchema = new Schema({
         unique: true
     },
     displayName: {
-        type: String,
-        required: true,
-        unique: true
+        type: String
     },
     photos: {
-        type: Object,
-        required: true,
+        type: Object
     },
     friendslist: {
-        type: Object,
-        required: true,
+        type: Object
     },
     updated_at: {
-      type: Date,
-      required: true
+      type: Date
     }
 });
 
