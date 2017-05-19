@@ -8,9 +8,14 @@ var express = require('express'),
     mongoose = require('mongoose'),
     serveStatic = require('serve-static'),
     keys = require('./config/keys'),
+    SteamWebAPI = require('steam-web'),
     SteamStrategy = require('passport-steam');
 
 var User = require('./models/user');
+var steam = new SteamWebAPI({
+    apiKey: keys.STEAM_APIKEY,
+    format: 'json'
+});
 
 passport.serializeUser(function(user, done) {
     done(null, user);
@@ -95,7 +100,7 @@ app.get('/auth/steam',
 
 app.get('/logout', function(req, res) {
     req.session.destroy(function(err) {
-        res.redirect('/'); //Inside a callback… bulletproof!
+        res.redirect('/');
     });
 });
 
@@ -105,44 +110,40 @@ app.get('/api/identity', ensureAuthenticated, function(req, res) {
 
 app.get('/api/friends/:steamid', function(req, res) {
     var steamid = req.params.steamid;
-    getFriendlist(steamid, function(err, data) {
-        if (err) return res.sendStatus(500);
-        res.send(data);
+    steam.getFriendList({
+        steamid: steamid,
+        relationship: 'all',
+        callback: function(err, data) {
+            if (err) return res.sendStatus(500);
+            res.status(200).json(data);
+        }
     });
 });
 
-function getFriendlist(id, callback) {
-    request('http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=' + keys.STEAM_APIKEY + '&steamid=' + id + '&relationship=friend', function(err, response, data) {
-        if (err) return callback(err);
-        try {
-            data = JSON.parse(data);
-            return callback(null, data);
-        } catch (err) {
-            return callback(new Error("Can't parse JSON data"));
-        }
-    });
-}
-
 app.patch('/api/users/:steamid', function(req, res) {
     var steamid = req.params.steamid;
-    getFriendlist(steamid, function(err, data) {
-        if (err) return res.sendStatus(500);
-
-              var date = new Date();
-              User.findOneAndUpdate({
-                  steamid: steamid
-              }, {
-                  $set: {
-                      friendslist: data.friendslist
-                  }
-              }, {
-                  new: true
-              }, function(err, user) {
-                  if (err) res.sendStatus(500);
-                  else if (!user) res.status(404).json({ error: "User not found." });
-                  else res.status(201).json(user);
-              });
-
+    steam.getFriendList({
+        steamid: steamid,
+        relationship: 'all',
+        callback: function(err, data) {
+            if (err) return res.sendStatus(500);
+            var date = new Date();
+            User.findOneAndUpdate({
+                steamid: steamid
+            }, {
+                $set: {
+                    friendslist: data.friendslist
+                }
+            }, {
+                new: true
+            }, function(err, user) {
+                if (err) res.sendStatus(500);
+                else if (!user) res.status(404).json({
+                    error: "User not found."
+                });
+                else res.status(201).json(user);
+            });
+        }
     });
 });
 
@@ -157,47 +158,47 @@ app.get('/api/changes/:steamid', function(req, res) {
             //New user with no friendlist
             if (storedList == undefined) res.status(200).json([]);
             else {
-                getFriendlist(steamid, function(err, data) {
-                    if (err) res.status(500).json({ error: "Steam API call error." });
-                    var currentList = data.friendslist;
-                    //Concatenación de amigos actuales con amigos almacenados
-                    var mergedJson = currentList.friends.concat(storedList.friends);
-                    var currentListAux = {};
-                    currentList.friends.forEach(function(currentObject) {
-                        currentListAux[currentObject.steamid] = true;
-                    });
-                    var storedListAux = {};
-                    storedList.friends.forEach(function(currentObject) {
-                        storedListAux[currentObject.steamid] = true;
-                    });
-                    //Se queda con los elementos de mergedJson que no parecen en amigos actuales
-                    // -- Amigos borrados --
-                    var deletedFriends = mergedJson.filter(function(currentObject) {
-                        if (currentObject.steamid in currentListAux) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    });
-                    //Se queda con los elementos de mergedJson que no aparecen en amigos almacenados
-                    // -- Amigos nuevos --
-                    var addedFriends = mergedJson.filter(function(currentObject) {
-                        if (currentObject.steamid in storedListAux) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    });
-                    var result = {}
-                    result['deletedFriends'] = deletedFriends;
-                    result['addedFriends'] = addedFriends;
-                    res.status(200).json(result);
+                steam.getFriendList({
+                    steamid: steamid,
+                    relationship: 'all',
+                    callback: function(err, data) {
+                        if (err) return res.status(500).json({
+                            error: "Steam API call error."
+                        });
+                        var currentList = data.friendslist;
+                        var mergedJson = currentList.friends.concat(storedList.friends);
+                        var currentListAux = {};
+                        currentList.friends.forEach(function(currentObject) {
+                            currentListAux[currentObject.steamid] = true;
+                        });
+                        var storedListAux = {};
+                        storedList.friends.forEach(function(currentObject) {
+                            storedListAux[currentObject.steamid] = true;
+                        });
+                        var deletedFriends = mergedJson.filter(function(currentObject) {
+                            if (currentObject.steamid in currentListAux) {
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        });
+                        var addedFriends = mergedJson.filter(function(currentObject) {
+                            if (currentObject.steamid in storedListAux) {
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        });
+                        var result = {}
+                        result['deletedFriends'] = deletedFriends;
+                        result['addedFriends'] = addedFriends;
+                        res.status(200).json(result);
+                    }
                 });
-
-            };
-        }
-        else res.status(404).json({ error: "Usuario no existente." });
-
+            }
+        } else res.status(404).json({
+            error: "Usuario no existente."
+        });
     });
 });
 
