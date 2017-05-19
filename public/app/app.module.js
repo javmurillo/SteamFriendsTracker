@@ -8,6 +8,8 @@
             'ngAnimate',
             'angular-loading-bar',
             'app.home',
+            'app.login',
+            'app.friends',
             'app.layout',
             'app.layout.navbar'
         ])
@@ -21,8 +23,8 @@
                     templateUrl: 'app/home/home.html',
                     controller: 'HomeController as vm',
                     resolve: {
-                        'LoginData': function(LoginService) {
-                            LoginService.promise;
+                        'LoadLoginData': function(LoginService) {
+                            return LoginService.getIdentity;
                         }
                     }
 

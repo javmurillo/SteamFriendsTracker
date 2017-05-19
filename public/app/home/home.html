@@ -8,3 +8,14 @@
       <p>Sign in with Steam in order to see any changes in your friendlist!</p>
    </div>
 </div>
+<div class="jumbotron"  ng-if="vm.isLogged()">
+      <center> <h2>Deleted users</h2></center>
+   <div ng-repeat="user in vm.changes.deletedFriends" class="container text-center">
+
+      <p>{{user.steamid}}</p>
+   </div>
+            <center>   <h2>Added users</h2></center>
+   <div ng-repeat="user in vm.changes.addedFriends" class="container text-center">
+      <p>{{user.steamid}}</p>
+   </div>
+</div>

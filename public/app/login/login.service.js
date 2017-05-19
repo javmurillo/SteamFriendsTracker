@@ -2,16 +2,16 @@
     'use strict';
 
     angular
-        .module('app.layout')
+        .module('app.login')
         .factory('LoginService', LoginService);
 
     function LoginService($http, $window) {
         var vm = this;
         vm.user = null;
-        var promise = $http.get("/api/identity").then(
+        var getIdentity = $http.get("/api/identity").then(
             function(response) { //success
                 console.log("User logged in.");
-                vm.user = response.data;
+                return vm.user = response.data;
             },
             function(response) { //error
                 console.log("User not logged in.");
@@ -19,7 +19,7 @@
         );
 
         var service = {
-            promise: promise,
+            getIdentity: getIdentity,
             loginRedirect: loginRedirect,
             logoutRedirect: logoutRedirect,
             isLogged: isLogged,
@@ -31,6 +31,7 @@
         function loginRedirect() {
             $window.location.href = '/auth/steam';
         }
+
         function logoutRedirect() {
             $window.location.href = '/logout';
         }
