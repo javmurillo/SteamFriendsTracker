@@ -51,7 +51,7 @@ passport.use(new SteamStrategy({
                 $set: {
                     displayName: displayName,
                     photos: photos,
-                    updated_at: date,
+                    updated_at: date
                 }
             }, {
                 upsert: true,
@@ -106,6 +106,20 @@ app.get('/logout', function(req, res) {
 
 app.get('/api/identity', ensureAuthenticated, function(req, res) {
     res.status(200).send(req.user);
+});
+
+app.get('/api/users/:steamid', function(req, res) {
+      var steamid = req.params.steamid;
+      var steamidArray = [];
+      steamidArray.push(steamid);
+      steam.getPlayerSummaries({
+          steamids: steamidArray,
+          callback: function(err, data) {
+            console.log(data);
+            if (err) return res.sendStatus(500);
+            res.status(200).json(data);
+    }
+  })
 });
 
 app.get('/api/friends/:steamid', function(req, res) {
@@ -201,6 +215,7 @@ app.get('/api/changes/:steamid', function(req, res) {
         });
     });
 });
+
 
 
 // GET /auth/steam/return
