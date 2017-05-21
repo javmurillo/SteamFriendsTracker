@@ -160,7 +160,7 @@ app.patch('/api/users/:steamid', function(req, res) {
     });
 });
 
-app.get('/api/changes/:steamid', function(req, res) {
+app.get('/api/changes/:steamid', ensureAuthenticated, function(req, res) {
     var steamid = req.params.steamid;
     User.findOne({
         steamid: steamid
@@ -169,7 +169,7 @@ app.get('/api/changes/:steamid', function(req, res) {
         else if (user) {
             var storedList = user.friendslist;
             //New user with no friendlist
-            if (storedList == undefined) res.status(200).json([]);
+            if (storedList == undefined) res.status(200).json({});
             else {
                 steam.getFriendList({
                     steamid: steamid,

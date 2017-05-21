@@ -16,44 +16,49 @@
         if (isLogged()) {
             vm.user = userLogged();
             vm.addedProfiles = {};
-            vm.deletedProfiles = [];
+            vm.deletedProfiles = {};
+            vm.displayChanges = true;
             var i = 0;
             var j = 0;
             FriendsService.getUserChanges(vm.user.steamid).then(function(response) {
-                  vm.changes = response.data;
-                  vm.changes.addedFriends.forEach(function(user) {
-                    FriendsService.getFriendProfile(user.steamid).then(function(response) {
-                          vm.addedProfiles[i] = response.data.response.players[0];
-                          vm.addedProfiles[i]['friendSince'] = user.friend_since;
-                          i++;
-                      });
-                  });
-                  vm.changes.deletedFriends.forEach(function(user) {
-                    FriendsService.getFriendProfile(user.steamid).then(function(response) {
-                          vm.deletedProfiles[j] = response.data.response.players[0];
-                          vm.deletedProfiles[j]['friendSince'] = user.friend_since;
-                          j++;
+                vm.changes = {}
+                console.log(vm.changes)
+                if (Object.keys(vm.changes).length === 0 && vm.changes.constructor === Object) {
+                  console.log("ey")
+                    vm.changes['addedFriends'] = [];
+                    vm.changes['deletedFriends'] = [];
+                    vm.displayChanges = false;
+                } else {
+                    vm.changes.addedFriends.forEach(function(user) {
+                        FriendsService.getFriendProfile(user.steamid).then(function(response) {
+                            vm.addedProfiles[i] = response.data.response.players[0];
+                            vm.addedProfiles[i]['friendSince'] = user.friend_since;
+                            i++;
+                        });
                     });
-                  });
-                  console.log(vm.addedProfiles);
-
-                  /*FriendsService.updateUserFriendlist(vm.user.steamid).then(
-                      function(response) { //success
-                          console.log("NO ERROR");
-
-                      },
-                      function(response) { //error
-                          console.log("ERROR");
-                      }
-                  );*/
-
-              });
-
+                    vm.changes.deletedFriends.forEach(function(user) {
+                        FriendsService.getFriendProfile(user.steamid).then(function(response) {
+                            vm.deletedProfiles[j] = response.data.response.players[0];
+                            vm.deletedProfiles[j]['friendSince'] = user.friend_since;
+                            j++;
+                        });
+                    });
+                    console.log(vm.addedProfiles);
+                    /*FriendsService.updateUserFriendlist(vm.user.steamid).then(
+                       function(response) { //success
+                           console.log("NO ERROR");
+                       },
+                       function(response) { //error
+                           console.log("ERROR");
+                       }
+                   );*/
+                }
+            });
 
         }
 
         function getDateByTimestamp(timestamp) {
-          return FriendsService.getDateByTimestamp(timestamp);
+            return FriendsService.getDateByTimestamp(timestamp);
         }
 
         function isLogged() {
