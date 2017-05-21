@@ -25,7 +25,10 @@
                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Logged in as {{vm.user.displayName}}<span class="caret"></span></a>
                <ul class="dropdown-menu">
                  <li>
-                    <a ng-click="vm.logoutRedirect()"><span>Logout</span></a>
+                    <a ng-click="vm.logoutRedirect()" id="logout">
+                    <span class="glyphicon glyphicon-log-out"></span>&nbsp;
+                    <span>Logout</span>
+                    </a>
                  </li>
                </ul>
             </li>

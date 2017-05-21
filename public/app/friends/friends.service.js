@@ -12,9 +12,12 @@
             return $http.get("/api/changes/" + steamid);
         };
 
+        vm.getFriendProfile = function(steamids) {
+          return $http.get("/api/users/" + steamids);
+        }
+
         vm.updateUserFriendlist = function(steamid) {
             return $http.patch("/api/users/" + steamid);
         };
-
     }
 })();

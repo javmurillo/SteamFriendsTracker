@@ -8,14 +8,35 @@
       <p>Sign in with Steam in order to see any changes in your friendlist!</p>
    </div>
 </div>
-<div class="jumbotron"  ng-if="vm.isLogged()">
-      <center> <h2>Deleted users</h2></center>
-   <div ng-repeat="user in vm.changes.deletedFriends" class="container text-center">
+<!--<center><h1>Welcome back {{vm.user.displayName}}</h1>   </center> -->
+<div class="container" ng-if="vm.isLogged()">
+   <div class="row">
+      <div class="col-md-6">
+         <ul>
+            <div class="text-center">
+               <h1><span class="label label-success">{{vm.changes.addedFriends.length}}</span> New Friends</h1>
+            </div>
+            <br/><br/>
+               <li class="list-group-item text-center" ng-repeat="user in vm.addedProfiles">
+                  <img ng-src="{{user.avatarmedium}}"/>
+                  <p>{{user.personaname}}</p>
+                  <p><a ng-href="http://steamcommunity.com/id/{{user.steamid}}">Steam profile</a></p>
+               </li>
 
-      <p>{{user.steamid}}</p>
-   </div>
-            <center>   <h2>Added users</h2></center>
-   <div ng-repeat="user in vm.changes.addedFriends" class="container text-center">
-      <p>{{user.steamid}}</p>
+         </ul>
+      </div>
+      <div class="col-md-6">
+         <ul>
+           <div class="text-center">
+              <h1><span class="label label-danger">{{vm.changes.deletedFriends.length}}</span> Users Lost</h1>
+           </div>
+            <br/><br/>
+               <li class="list-group-item text-center" ng-repeat="user in vm.deletedProfiles">
+                  <img ng-src="{{user.avatarmedium}}"/>
+                  <p>{{user.personaname}}</p>
+                  <p><a ng-href="http://steamcommunity.com/id/{{user.steamid}}">Steam profile</a></p>
+               </li>
+         </ul>
+      </div>
    </div>
 </div>
