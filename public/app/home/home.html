@@ -2,6 +2,13 @@
    .jumbotron {
    background-color: #e2f8ff!important;
    }
+   /* unvisited link */
+a:link, a:hover, a:visited {
+    color: white;
+}
+.border-right {
+    border-right: 1px solid lightgrey;
+}
 </style>
 <div class="jumbotron"  ng-if="!vm.isLogged()">
    <div class="container text-center">
@@ -12,31 +19,49 @@
 <div class="container" ng-if="vm.isLogged()">
    <div class="row">
       <div class="col-md-6">
-         <ul>
             <div class="text-center">
                <h1><span class="label label-success">{{vm.changes.addedFriends.length}}</span> New Friends</h1>
             </div>
             <br/><br/>
-               <li class="list-group-item text-center" ng-repeat="user in vm.addedProfiles">
-                  <img ng-src="{{user.avatarmedium}}"/>
-                  <p>{{user.personaname}}</p>
-                  <p><a ng-href="http://steamcommunity.com/id/{{user.steamid}}">Steam profile</a></p>
-               </li>
+            <div class="media border-right" ng-repeat="user in vm.addedProfiles">
+                <a class="pull-left" href="#">
+                    <img class="media-object dp img-circle" ng-src="{{user.avatarmedium}}" style="width: 100px;height:100px;">
+                </a>
+                 <ul>
+                <li class="media-body">
+                    <h4 class="media-heading">{{user.personaname}}  <small>{{user.steamid}}</small></h4>
+                    <h5>Friends since: {{vm.getDateByTimestamp(user.friendSince)}}</h5>
+                    <hr style="margin:8px auto">
+                    <span class="label label-default"><a ng-href="{{user.profileurl}}" target="_blank">Steam Profile</a></span>
+                    <span class="label label-primary"><a ng-href="{{user.profileurl}}screenshots" target="_blank">Screenshots</a></span>
+                    <span class="label label-info"><a ng-href="{{user.profileurl}}friends" target="_blank">Friends</a></span>
+                </li><br/>
+            </div>
+
 
          </ul>
       </div>
+
       <div class="col-md-6">
-         <ul>
-           <div class="text-center">
-              <h1><span class="label label-danger">{{vm.changes.deletedFriends.length}}</span> Users Lost</h1>
-           </div>
+            <div class="text-center">
+               <h1><span class="label label-danger">{{vm.changes.deletedFriends.length}}</span> Deleted Friends</h1>
+            </div>
             <br/><br/>
-               <li class="list-group-item text-center" ng-repeat="user in vm.deletedProfiles">
-                  <img ng-src="{{user.avatarmedium}}"/>
-                  <p>{{user.personaname}}</p>
-                  <p><a ng-href="http://steamcommunity.com/id/{{user.steamid}}">Steam profile</a></p>
-               </li>
+            <div class="media border-right" ng-repeat="user in vm.deletedProfiles">
+                <a class="pull-left" href="#">
+                    <img class="media-object dp img-circle" ng-src="{{user.avatarmedium}}" style="width: 100px;height:100px;">
+                </a>
+                 <ul>
+                <li class="media-body">
+                    <h4 class="media-heading">{{user.personaname}}  <small>{{user.steamid}}</small></h4>
+                    <h5>Friends since: {{vm.getDateByTimestamp(user.friendSince)}}</h5>
+                    <hr style="margin:8px auto">
+                    <span class="label label-default"><a ng-href="{{user.profileurl}}" target="_blank">Steam Profile</a></span>
+                    <span class="label label-primary"><a ng-href="{{user.profileurl}}screenshots" target="_blank">Screenshots</a></span>
+                    <span class="label label-info"><a ng-href="{{user.profileurl}}friends" target="_blank">Friends</a></span>
+                </li><br/>
+            </div>
+
          </ul>
       </div>
-   </div>
 </div>

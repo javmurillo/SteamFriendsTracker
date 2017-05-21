@@ -115,11 +115,10 @@ app.get('/api/users/:steamid', function(req, res) {
       steam.getPlayerSummaries({
           steamids: steamidArray,
           callback: function(err, data) {
-            console.log(data);
             if (err) return res.sendStatus(500);
             res.status(200).json(data);
-    }
-  })
+          }
+      })
 });
 
 app.get('/api/friends/:steamid', function(req, res) {
@@ -206,6 +205,7 @@ app.get('/api/changes/:steamid', function(req, res) {
                         var result = {}
                         result['deletedFriends'] = deletedFriends;
                         result['addedFriends'] = addedFriends;
+
                         res.status(200).json(result);
                     }
                 });
