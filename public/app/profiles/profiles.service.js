@@ -2,10 +2,10 @@
     'use strict';
 
     angular
-        .module('app.friends')
-        .service('FriendsService', FriendsService);
+        .module('app.profiles')
+        .service('ProfilesService', ProfilesService);
 
-    function FriendsService($http) {
+    function ProfilesService($http) {
         var vm = this;
 
         vm.getUserChanges = function(steamid) {

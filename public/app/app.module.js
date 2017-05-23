@@ -9,7 +9,7 @@
             'angular-loading-bar',
             'app.home',
             'app.login',
-            'app.friends',
+            'app.profiles',
             'app.layout',
             'app.layout.navbar'
         ])
