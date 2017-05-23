@@ -135,6 +135,7 @@ app.get('/api/friends/:steamid', function(req, res) {
 
 app.patch('/api/users/:steamid', function(req, res) {
     var steamid = req.params.steamid;
+    var date = new Date();
     steam.getFriendList({
         steamid: steamid,
         relationship: 'all',
@@ -145,7 +146,8 @@ app.patch('/api/users/:steamid', function(req, res) {
                 steamid: steamid
             }, {
                 $set: {
-                    friendslist: data.friendslist
+                    friendslist: data.friendslist,
+                    updated_at: date
                 }
             }, {
                 new: true
@@ -167,9 +169,12 @@ app.get('/api/changes/:steamid', ensureAuthenticated, function(req, res) {
     }, function(err, user) {
         if (err) res.sendStatus(500);
         else if (user) {
+            var result = {}
+            result['deletedFriends'] = [];
+            result['addedFriends'] = [];
             var storedList = user.friendslist;
             //New user with no friendlist
-            if (storedList == undefined) res.status(200).json({});
+            if (storedList == undefined) res.status(200).json(result);
             else {
                 steam.getFriendList({
                     steamid: steamid,
@@ -202,7 +207,7 @@ app.get('/api/changes/:steamid', ensureAuthenticated, function(req, res) {
                                 return true;
                             }
                         });
-                        var result = {}
+                        console.log(deletedFriends)
                         result['deletedFriends'] = deletedFriends;
                         result['addedFriends'] = addedFriends;
 

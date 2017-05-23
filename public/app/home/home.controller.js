@@ -17,17 +17,14 @@
             vm.user = userLogged();
             vm.addedProfiles = {};
             vm.deletedProfiles = {};
-            vm.displayChanges = true;
+            vm.noChanges = false;
             var i = 0;
             var j = 0;
             FriendsService.getUserChanges(vm.user.steamid).then(function(response) {
-                vm.changes = {}
+                vm.changes = response.data;
                 console.log(vm.changes)
-                if (Object.keys(vm.changes).length === 0 && vm.changes.constructor === Object) {
-                  console.log("ey")
-                    vm.changes['addedFriends'] = [];
-                    vm.changes['deletedFriends'] = [];
-                    vm.displayChanges = false;
+                if (vm.changes.addedFriends.length < 1 && vm.changes.deletedFriends.length < 1 ) {
+                    vm.noChanges = true;
                 } else {
                     vm.changes.addedFriends.forEach(function(user) {
                         FriendsService.getFriendProfile(user.steamid).then(function(response) {
@@ -43,16 +40,10 @@
                             j++;
                         });
                     });
-                    console.log(vm.addedProfiles);
-                    /*FriendsService.updateUserFriendlist(vm.user.steamid).then(
-                       function(response) { //success
-                           console.log("NO ERROR");
-                       },
-                       function(response) { //error
-                           console.log("ERROR");
-                       }
-                   );*/
+
+
                 }
+                FriendsService.updateUserFriendlist(vm.user.steamid);
             });
 
         }
