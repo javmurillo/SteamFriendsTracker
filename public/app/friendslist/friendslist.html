@@ -1,0 +1,59 @@
+<style>
+   .jumbotron {
+   background-color: #f4f4f4!important;
+   }
+   /* unvisited link */
+   a:link, a:hover, a:visited {
+   color: white;
+   }
+   .border-right {
+   border-right: 1px solid lightgrey;
+   }
+}
+</style>
+<!--<center><h1>Welcome back {{vm.user.displayName}}</h1>   </center> -->
+<div class="container" ng-if="vm.isLogged()">
+   <div class="text-center">
+      <h1><span class="label label-primary">{{vm.friendslist.length}}</span> Total Friends</h1>
+   </div>
+   <br/> <br/><br/>
+   <div class="row" ng-repeat="user in vm.users" ng-switch on="$index % 2">
+      <div class="col-md-6" ng-switch-when="0">
+         <div class="media border-right">
+            <a class="pull-left" href="#">
+            <img class="media-object dp img-circle" ng-src="{{vm.users[$index].avatarmedium}}" style="width: 100px;height:100px;">
+            </a>
+            <ul>
+               <li class="media-body">
+                  <h4 class="media-heading">{{vm.users[$index].personaname}}  <small>{{vm.users[$index].steamid}}</small></h4>
+                  <h5><b>Friends since:</b> {{vm.getDateByTimestamp(vm.users[$index].friendSince)}}</h5>
+                  <hr style="margin:8px auto">
+                  <span class="label label-default"><a ng-href="{{vm.users[$index].profileurl}}" target="_blank">Steam Profile</a></span>
+                  <span class="label label-primary"><a ng-href="{{vm.users[$index].profileurl}}screenshots" target="_blank">Screenshots</a></span>
+                  <span class="label label-info"><a ng-href="{{vm.users[$index].profileurl}}friends" target="_blank">Friends</a></span>
+               </li>
+               <br/>
+            </ul>
+         </div>
+      </div>
+      <div class="col-md-6" ng-switch-when="0" ng-show="vm.users[$index+1]">
+         <div class="media border-right">
+            <a class="pull-left" href="#">
+            <img class="media-object dp img-circle" ng-src="{{vm.users[$index+1].avatarmedium}}" style="width: 100px;height:100px;">
+            </a>
+            <ul>
+               <li class="media-body">
+                  <h4 class="media-heading">{{vm.users[$index+1].personaname}}  <small>{{vm.users[$index+1].steamid}}</small></h4>
+                  <h5><b>Friends since:</b> {{vm.getDateByTimestamp(vm.users[$index+1].friendSince)}}</h5>
+                  <hr style="margin:8px auto">
+                  <span class="label label-default"><a ng-href="{{vm.users[$index+1].profileurl}}" target="_blank">Steam Profile</a></span>
+                  <span class="label label-primary"><a ng-href="{{vm.users[$index+1].profileurl}}screenshots" target="_blank">Screenshots</a></span>
+                  <span class="label label-info"><a ng-href="{{vm.users[$index+1].profileurl}}friends" target="_blank">Friends</a></span>
+               </li>
+               <br/>
+            </ul>
+         </div>
+      </div>
+      <br/>
+   </div>
+</div>

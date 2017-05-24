@@ -24,7 +24,7 @@
          </div>
          <br/><br/>
          <div class="jumbotron text-center" ng-if="vm.changes.addedFriends.length < 1 && !vm.noChanges">
-               <p><b>Nobody</b> loves you (at the moment)!</p>
+            <p><b>Nobody</b> loves you (at the moment)!</p>
          </div>
          <div class="media border-right" ng-repeat="user in vm.addedProfiles">
             <a class="pull-left" href="#">
@@ -40,8 +40,8 @@
                   <span class="label label-info"><a ng-href="{{user.profileurl}}friends" target="_blank">Friends</a></span>
                </li>
                <br/>
+            </ul>
          </div>
-         </ul>
       </div>
       <div class="col-md-6">
          <div class="text-center">
@@ -49,7 +49,7 @@
          </div>
          <br/><br/>
          <div class="jumbotron text-center" ng-if="vm.changes.deletedFriends.length < 1 && !vm.noChanges">
-               <p><b>Nobody</b> hates you (at the moment)!</p>
+            <p><b>Nobody</b> hates you (at the moment)!</p>
          </div>
          <div class="media border-right" ng-repeat="user in vm.deletedProfiles">
             <a class="pull-left" href="#">
@@ -65,11 +65,11 @@
                   <span class="label label-info"><a ng-href="{{user.profileurl}}friends" target="_blank">Friends</a></span>
                </li>
                <br/>
+            </ul>
          </div>
-         </ul>
       </div>
    </div>
    <div class="jumbotron text-center"  ng-if="vm.noChanges">
-         <p>You have <b>no changes</b> since the last time you logged on!</p>
+      <p>You have <b>no changes</b> since the last time you logged on!</p>
    </div>
 </div>

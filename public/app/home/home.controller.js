@@ -5,7 +5,7 @@
         .module('app.home')
         .controller('HomeController', HomeController);
 
-    HomeController.inject = ['LoginService', 'FriendsService'];
+    HomeController.inject = ['$http', 'LoginService', 'FriendsService'];
 
     function HomeController($http, LoginService, ProfilesService) {
         var vm = this;
@@ -43,7 +43,7 @@
 
 
                 }
-                ProfilesService.updateUserFriendlist(vm.user.steamid);
+                //ProfilesService.updateUserFriendslist(vm.user.steamid);
             });
 
         }

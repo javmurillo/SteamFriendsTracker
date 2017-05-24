@@ -5,18 +5,23 @@
         .module('app.profiles')
         .service('ProfilesService', ProfilesService);
 
-    function ProfilesService($http) {
+    function ProfilesService($http, $cacheFactory) {
         var vm = this;
+        var cache = $cacheFactory('myCache');
 
         vm.getUserChanges = function(steamid) {
             return $http.get("/api/changes/" + steamid);
         };
 
         vm.getFriendProfile = function(steamids) {
-          return $http.get("/api/users/" + steamids);
+          return $http.get("/api/users/" + steamids, { cache: cache  });
         }
 
-        vm.updateUserFriendlist = function(steamid) {
+        vm.getUserFriendslist = function(steamid) {
+            return $http.get("/api/friends/" + steamid);
+        };
+
+        vm.updateUserFriendslist = function(steamid) {
             return $http.patch("/api/users/" + steamid);
         };
 

@@ -8,6 +8,7 @@
             'ngAnimate',
             'angular-loading-bar',
             'app.home',
+            'app.friendslist',
             'app.login',
             'app.profiles',
             'app.layout',
@@ -28,6 +29,16 @@
                         }
                     }
 
+                })
+                .state('friendslist', {
+                    url: '/friendslist',
+                    templateUrl: 'app/friendslist/friendslist.html',
+                    controller: 'FriendslistController as vm',
+                    resolve: {
+                        'LoadLoginData': function(LoginService) {
+                            return LoginService.getIdentity;
+                        }
+                    }
                 });
         });
 })();

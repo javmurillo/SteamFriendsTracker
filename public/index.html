@@ -14,7 +14,6 @@
       <meta name="viewport"
          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"/>
       <base href="/">
-      <!-- CSS del sistema obtenidos de bower -->
       <!-- build:css styles/lib.css -->
       <!-- bower:css -->
       <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
@@ -26,7 +25,7 @@
    </head>
    <body>
       <div>
-         <!-- Inyeccion del layout base de la aplicacion con navbar y contenido -->
+          <!-- Layout with navbar and content -->
          <div ng-include="'app/layout/layout.html'"></div>
       </div>
       <br>
@@ -49,12 +48,13 @@
       <script src="bower_components/angular-material/angular-material.js"></script>
       <!-- endbower -->
       <!-- endbuild -->
-      <!-- Importacion automatica de modulos individuales y sus ficheros -->
       <!-- build:js js/app.js -->
       <!-- inject:js -->
       <script src="app/app.module.js"></script>
       <script src="app/login/login.module.js"></script>
       <script src="app/login/login.service.js"></script>
+      <script src="app/friendslist/friendslist.module.js"></script>
+      <script src="app/friendslist/friendslist.controller.js"></script>
       <script src="app/profiles/profiles.module.js"></script>
       <script src="app/profiles/profiles.service.js"></script>
       <script src="app/home/home.module.js"></script>
