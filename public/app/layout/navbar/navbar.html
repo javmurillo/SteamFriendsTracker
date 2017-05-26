@@ -29,6 +29,12 @@
                <span>Historical</span>
                </a>
             </li>
+            <li>
+               <a ui-sref="stats" id="stats" ng-switch-when="true">
+               <span class="glyphicon glyphicon glyphicon-stats"></span>&nbsp;
+               <span>Stats</span>
+               </a>
+            </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><img class="navbar-form" src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png" ng-click="vm.loginRedirect()" ng-switch-when="false"></li>

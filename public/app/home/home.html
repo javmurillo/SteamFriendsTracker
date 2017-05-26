@@ -1,7 +1,7 @@
 <style>
-   .jumbotron {
-   background-color: #f4f4f4!important;
-   }
+  .gray {
+      background-color: #f4f4f4!important;
+    }
    /* unvisited link */
    a:link, a:hover, a:visited {
    color: white;
@@ -10,9 +10,9 @@
    border-right: 1px solid lightgrey;
    }
 </style>
-<div class="jumbotron"  ng-if="!vm.isLogged()">
+<div class="jumbotron" ng-if="!vm.isLogged()">
    <div class="container text-center">
-      <p>Sign in with Steam in order to check any changes in your friendlist!</p>
+      <p>Sign in with <b>Steam</b> in order to check any changes in your friendlist!</p>
    </div>
 </div>
 <!--<center><h1>Welcome back {{vm.user.displayName}}</h1>   </center> -->
@@ -23,7 +23,7 @@
             <h1><span class="label label-success">{{vm.changes.addedFriends.length}}</span> New Friends</h1>
          </div>
          <br/><br/>
-         <div class="jumbotron text-center" ng-if="vm.changes.addedFriends.length < 1 && !vm.noChanges">
+         <div class="jumbotron gray text-center" ng-if="vm.changes.addedFriends.length < 1 && !vm.noChanges">
             <p><b>Nobody</b> loves you (at the moment)!</p>
          </div>
          <div class="media border-right" ng-repeat="user in vm.addedProfiles">

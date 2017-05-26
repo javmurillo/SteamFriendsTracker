@@ -40,12 +40,9 @@
                             j++;
                         });
                     });
-
-
                 }
-                //ProfilesService.updateUserFriendslist(vm.user.steamid);
+                ProfilesService.updateUserFriendslist(vm.user.steamid);
             });
-
         }
 
         function getDateByTimestamp(timestamp) {

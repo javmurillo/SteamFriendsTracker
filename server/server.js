@@ -11,6 +11,8 @@ var express = require('express'),
     SteamWebAPI = require('steam-web'),
     SteamStrategy = require('passport-steam');
 
+var app = express();
+
 var User = require('./models/user');
 var steam = new SteamWebAPI({
     apiKey: keys.STEAM_APIKEY,
@@ -28,9 +30,8 @@ passport.deserializeUser(function(id, done) {
 });
 
 // Use the SteamStrategy within Passport.
-//   Strategies in passport require a `validate` function, which accept
-//   credentials (in this case, an OpenID identifier and profile), and invoke a
-//   callback with a user object.
+//   Register a new user and return back to authenticate(), which will
+//   call serializeUser().
 passport.use(new SteamStrategy({
         returnURL: 'http://localhost:3000/auth/steam/return',
         realm: 'http://localhost:3000/',
@@ -63,7 +64,7 @@ passport.use(new SteamStrategy({
     }
 ));
 
-var app = express();
+
 
 app.use(session({
     secret: 'your secret',
@@ -73,8 +74,6 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// Initialize Passport!  Also use passport.session() middleware, to support
-// persistent login sessions (recommended).
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({
@@ -86,8 +85,7 @@ app.use(serveStatic('D:/GitProjects/steam-whodeletedme/public'))
 mongoose.connect('mongodb://localhost/whodeletedme-db');
 
 // GET /auth/steam
-//   Use passport.authenticate() as route middleware to authenticate the
-//   request.  The first step in Steam authentication will involve redirecting
+//   The first step in Steam authentication will involve redirecting
 //   the user to steamcommunity.com.  After authenticating, Steam will redirect the
 //   user back to this application at /auth/steam/return
 app.get('/auth/steam',
@@ -98,41 +96,61 @@ app.get('/auth/steam',
             res.redirect('/');
         }));
 
+// GET /logout
+//   Destroys the session
 app.get('/logout', function(req, res) {
     req.session.destroy(function(err) {
         res.redirect('/');
     });
 });
 
+// GET /api/identity
+//    Return the user profile
 app.get('/api/identity', ensureAuthenticated, function(req, res) {
-    res.status(200).send(req.user);
+    res.status(200).json(req.user);
 });
 
-app.get('/api/users/:steamid', function(req, res) {
+// GET /api/steam/profile/:steamid
+//    200 - OK. Return the steam profile(s) (without friendslist) given by the steamid(s)
+//    500 - Internal Server Error. Return "Steam API call error"
+app.get('/api/steam/profile/:steamid', function(req, res) {
       var steamid = req.params.steamid;
       var steamidArray = [];
       steamidArray.push(steamid);
       steam.getPlayerSummaries({
           steamids: steamidArray,
           callback: function(err, data) {
-            if (err) return res.sendStatus(500);
+            if (err) return res.status(500).json({
+                error: "Steam API call error"
+            });
             res.status(200).json(data);
           }
       })
 });
 
-app.get('/api/friends/:steamid', function(req, res) {
+// GET /api/steam/friendslist/
+//    200 - OK. Return the steam friendslist given by the steamid
+//    500 - Internal Server Error. Return "Steam API call error."
+app.get('/api/steam/friendslist/:steamid', function(req, res) {
     var steamid = req.params.steamid;
     steam.getFriendList({
         steamid: steamid,
         relationship: 'all',
         callback: function(err, data) {
-            if (err) return res.sendStatus(500);
+            if (err) return res.status(500).json({
+                error: "Steam API call error"
+            });
             res.status(200).json(data);
         }
     });
 });
 
+// PATCH /api/users/:steamid
+//    200 - OK. If user's friendslist updated successfully.
+//    500 - Internal Server Error.
+//          Return "Steam API call error" or
+//          "MongooDB error"
+//    404 - Not Found. Return "User not found".
 app.patch('/api/users/:steamid', function(req, res) {
     var steamid = req.params.steamid;
     var date = new Date();
@@ -140,7 +158,9 @@ app.patch('/api/users/:steamid', function(req, res) {
         steamid: steamid,
         relationship: 'all',
         callback: function(err, data) {
-            if (err) return res.sendStatus(500);
+            if (err) return res.status(500).json({
+                error: "Steam API call error"
+            });
             var date = new Date();
             User.findOneAndUpdate({
                 steamid: steamid
@@ -152,22 +172,32 @@ app.patch('/api/users/:steamid', function(req, res) {
             }, {
                 new: true
             }, function(err, user) {
-                if (err) res.sendStatus(500);
-                else if (!user) res.status(404).json({
-                    error: "User not found."
+                if (err) res.status(500).json({
+                    error: "MongooDB error"
                 });
-                else res.status(201).json(user);
+                else if (!user) res.status(404).json({
+                    error: "User not found"
+                });
+                else res.sendStatus(200);
             });
         }
     });
 });
 
-app.get('/api/changes/:steamid', ensureAuthenticated, function(req, res) {
+// GET /api/users/changes/:steamid
+//    200 - OK. Return user's changes (comparison between currend and stored list).
+//    500 - Internal Server Error.
+//          Return "Steam API call error." or
+//          "MongooDB error."
+//    404 - Not Found. Return "User not found".
+app.get('/api/users/changes/:steamid', ensureAuthenticated, function(req, res) {
     var steamid = req.params.steamid;
     User.findOne({
         steamid: steamid
     }, function(err, user) {
-        if (err) res.sendStatus(500);
+        if (err) res.status(500).json({
+            error: "MongooDB error"
+        });
         else if (user) {
             var result = {}
             result['deletedFriends'] = [];
@@ -181,7 +211,7 @@ app.get('/api/changes/:steamid', ensureAuthenticated, function(req, res) {
                     relationship: 'all',
                     callback: function(err, data) {
                         if (err) return res.status(500).json({
-                            error: "Steam API call error."
+                            error: "Steam API call error"
                         });
                         var currentList = data.friendslist;
                         var mergedJson = currentList.friends.concat(storedList.friends);
@@ -216,7 +246,7 @@ app.get('/api/changes/:steamid', ensureAuthenticated, function(req, res) {
                 });
             }
         } else res.status(404).json({
-            error: "Usuario no existente."
+            error: "User not found"
         });
     });
 });
@@ -247,10 +277,6 @@ app.all('/*', function(req, res, next) {
 app.listen(3000);
 
 // Simple route middleware to ensure user is authenticated.
-//   Use this route middleware on any resource that needs to be protected.  If
-//   the request is authenticated (typically via a persistent login session),
-//   the request will proceed.  Otherwise, the user will be redirected to the
-//   login page.
 function ensureAuthenticated(req, res, next) {
     console.log("ensureAuthenticated");
     if (req.isAuthenticated()) {

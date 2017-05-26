@@ -16,31 +16,32 @@
         vm.firstHalfProfiles = {};
         vm.secondHalfProfiles = {};
 
+        vm.users = {}
+        vm.internalError = false;
         vm.user = userLogged();
 
-        ProfilesService.getUserFriendslist(vm.user.steamid).then(function(response) {
-            vm.friendslist = response.data.friendslist.friends;
-            console.log(vm.friendslist);
-            vm.users = {}
-            var i = 0;
-            vm.friendslist.forEach(function(user) {
-                ProfilesService.getFriendProfile(user.steamid).then(function(response) {
-                    vm.users[i] = response.data.response.players[0];
-                    vm.users[i]['friendSince'] = user.friend_since;
-                    i++;
+        ProfilesService.getUserFriendslist(vm.user.steamid)
+            .then(function(response) {
+                console.log(response);
+                vm.friendslist = response.data.friendslist.friends;
+                console.log(vm.friendslist);
+                var i = 0;
+                vm.friendslist.forEach(function(user) {
+                    ProfilesService.getFriendProfile(user.steamid)
+                      .then(function(response) {
+                          vm.users[i] = response.data.response.players[0];
+                          vm.users[i]['friendSince'] = user.friend_since;
+                          i++;
+                        })
+                        .catch(function(data) {
+                            vm.internalError = true;
+                        });
                 });
+            })
+            .catch(function(data) {
+                vm.friendslist = [];
+                vm.internalError = true;
             });
-
-        });
-
-        function chunk(arr, size) {
-            var newArr = [];
-            for (var i=0; i<arr.length; i+=size) {
-              newArr.push(arr.slice(i, i+size));
-            }
-            return newArr;
-        }
-
 
         function getDateByTimestamp(timestamp) {
             return ProfilesService.getDateByTimestamp(timestamp);
@@ -53,7 +54,5 @@
         function userLogged() {
             return LoginService.userLogged();
         }
-
-
     }
 })();

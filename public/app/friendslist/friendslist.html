@@ -1,7 +1,7 @@
 <style>
-   .jumbotron {
-   background-color: #f4f4f4!important;
-   }
+   .pink {
+       background-color: #ffd5d5!important;
+     }
    /* unvisited link */
    a:link, a:hover, a:visited {
    color: white;
@@ -17,6 +17,9 @@
       <h1><span class="label label-primary">{{vm.friendslist.length}}</span> Total Friends</h1>
    </div>
    <br/> <br/><br/>
+   <div class="jumbotron pink text-center" ng-if="vm.internalError">
+      <p>Oops! Something went <b>wrong</b>.</p>
+   </div>
    <div class="row" ng-repeat="user in vm.users" ng-switch on="$index % 2">
       <div class="col-md-6" ng-switch-when="0">
          <div class="media border-right">

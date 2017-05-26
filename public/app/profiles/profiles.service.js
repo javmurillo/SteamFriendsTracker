@@ -10,15 +10,15 @@
         var cache = $cacheFactory('myCache');
 
         vm.getUserChanges = function(steamid) {
-            return $http.get("/api/changes/" + steamid);
+            return $http.get("/api/users/changes/" + steamid);
         };
 
         vm.getFriendProfile = function(steamids) {
-          return $http.get("/api/users/" + steamids, { cache: cache  });
+          return $http.get("/api/steam/profile/" + steamids, { cache: cache  });
         }
 
         vm.getUserFriendslist = function(steamid) {
-            return $http.get("/api/friends/" + steamid);
+            return $http.get("/api/steam/friendslist/" + steamid);
         };
 
         vm.updateUserFriendslist = function(steamid) {
