@@ -2,6 +2,9 @@
   .gray {
       background-color: #f4f4f4!important;
     }
+    .pink {
+        background-color: #ffd5d5!important;
+      }
    /* unvisited link */
    a:link, a:hover, a:visited {
    color: white;
@@ -23,7 +26,7 @@
             <h1><span class="label label-success">{{vm.changes.addedFriends.length}}</span> New Friends</h1>
          </div>
          <br/><br/>
-         <div class="jumbotron gray text-center" ng-if="vm.changes.addedFriends.length < 1 && !vm.noChanges">
+         <div class="jumbotron gray text-center" ng-if="vm.changes.addedFriends.length < 1 && !vm.internalError && !vm.noChanges">
             <p><b>Nobody</b> loves you (at the moment)!</p>
          </div>
          <div class="media border-right" ng-repeat="user in vm.addedProfiles">
@@ -48,7 +51,7 @@
             <h1><span class="label label-danger">{{vm.changes.deletedFriends.length}}</span> Deleted Friends</h1>
          </div>
          <br/><br/>
-         <div class="jumbotron text-center" ng-if="vm.changes.deletedFriends.length < 1 && !vm.noChanges">
+         <div class="jumbotron text-center" ng-if="vm.changes.deletedFriends.length < 1 && !vm.internalError && !vm.noChanges">
             <p><b>Nobody</b> hates you (at the moment)!</p>
          </div>
          <div class="media border-right" ng-repeat="user in vm.deletedProfiles">
@@ -69,7 +72,10 @@
          </div>
       </div>
    </div>
-   <div class="jumbotron text-center"  ng-if="vm.noChanges">
+   <div class="jumbotron text-center"  ng-if="vm.noChanges && !vm.internalError">
       <p>You have <b>no changes</b> since the last time you logged on!</p>
+   </div>
+   <div class="jumbotron pink text-center" ng-if="vm.internalError">
+      <p>Oops! Stored list was not <b>updated</b>.</p>
    </div>
 </div>

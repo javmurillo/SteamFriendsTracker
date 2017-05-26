@@ -5,7 +5,7 @@
         .module('app.friendslist')
         .controller('FriendslistController', FriendslistController);
 
-    FriendslistController.inject = ['$http', 'LoginService', 'FriendsService'];
+    FriendslistController.inject = ['$http', 'LoginService', 'ProfilesService'];
 
     function FriendslistController($http, LoginService, ProfilesService) {
         var vm = this;
@@ -22,16 +22,14 @@
 
         ProfilesService.getUserFriendslist(vm.user.steamid)
             .then(function(response) {
-                console.log(response);
                 vm.friendslist = response.data.friendslist.friends;
-                console.log(vm.friendslist);
                 var i = 0;
                 vm.friendslist.forEach(function(user) {
                     ProfilesService.getFriendProfile(user.steamid)
-                      .then(function(response) {
-                          vm.users[i] = response.data.response.players[0];
-                          vm.users[i]['friendSince'] = user.friend_since;
-                          i++;
+                        .then(function(response) {
+                            vm.users[i] = response.data.response.players[0];
+                            vm.users[i]['friendSince'] = user.friend_since;
+                            i++;
                         })
                         .catch(function(data) {
                             vm.internalError = true;
