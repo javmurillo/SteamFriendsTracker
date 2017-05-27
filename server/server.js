@@ -52,6 +52,10 @@ passport.use(new SteamStrategy({
                 $set: {
                     displayName: displayName,
                     photos: photos,
+                    historical: {
+                          "addedFriends" : [],
+                          "deletedFriends" : []
+                      },
                     updated_at: date
                 }
             }, {
@@ -63,9 +67,7 @@ passport.use(new SteamStrategy({
         });
     }
 ));
-
-
-
+app.use(bodyParser.json());
 app.use(session({
     secret: 'your secret',
     name: 'id',
@@ -113,7 +115,7 @@ app.get('/api/identity', ensureAuthenticated, function(req, res) {
 // GET /api/steam/profile/:steamid
 //    200 - OK. Return the steam profile(s) (without friendslist) given by the steamid(s)
 //    500 - Internal Server Error. Return "Steam API call error"
-app.get('/api/steam/profile/:steamid', function(req, res) {
+app.get('/api/steam/profile/:steamid', ensureAuthenticated, function(req, res) {
       var steamid = req.params.steamid;
       var steamidArray = [];
       steamidArray.push(steamid);
@@ -131,7 +133,7 @@ app.get('/api/steam/profile/:steamid', function(req, res) {
 // GET /api/steam/friendslist/
 //    200 - OK. Return the steam friendslist given by the steamid
 //    500 - Internal Server Error. Return "Steam API call error."
-app.get('/api/steam/friendslist/:steamid', function(req, res) {
+app.get('/api/steam/friendslist/:steamid', ensureAuthenticated, function(req, res) {
     var steamid = req.params.steamid;
     steam.getFriendList({
         steamid: steamid,
@@ -146,13 +148,19 @@ app.get('/api/steam/friendslist/:steamid', function(req, res) {
 });
 
 // PATCH /api/users/:steamid
-//    200 - OK. If user's friendslist updated successfully.
+//    200 - OK. If user's stored friendslist updated successfully.
 //    500 - Internal Server Error.
 //          Return "Steam API call error" or
 //          "MongooDB error"
 //    404 - Not Found. Return "User not found".
-app.patch('/api/users/:steamid', function(req, res) {
-    var steamid = req.params.steamid;
+app.patch('/api/users', function(req, res) {
+    console.log("PATCH /api/users/:steamid");
+    console.log(req.body)
+    var steamid = req.body.steamid;
+    var historical = req.body.historical;
+    console.log(steamid)
+    console.log(historical)
+
     var date = new Date();
     steam.getFriendList({
         steamid: steamid,
@@ -167,6 +175,7 @@ app.patch('/api/users/:steamid', function(req, res) {
             }, {
                 $set: {
                     friendslist: data.friendslist,
+                   historical: historical,
                     updated_at: date
                 }
             }, {

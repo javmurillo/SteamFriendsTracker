@@ -17,6 +17,9 @@ var userSchema = new Schema({
     friendslist: {
         type: Object
     },
+    historical: {
+      type: Object
+    },
     updated_at: {
       type: Date
     }

@@ -7,14 +7,15 @@
 
     HomeController.inject = ['$http', 'LoginService', 'ProfilesService', 'AlertService'];
 
-    function HomeController($http, LoginService, ProfilesService, AlertService, LoadLoginData) {
+    function HomeController($http, LoginService, ProfilesService, AlertService) {
         var vm = this;
-        console.log(LoadLoginData)
+
         vm.isLogged = isLogged;
         vm.userLogged = userLogged;
         vm.getDateByTimestamp = getDateByTimestamp;
         if (isLogged()) {
             vm.user = userLogged();
+            vm.changes = {};
             vm.addedProfiles = {};
             vm.deletedProfiles = {};
             vm.noChanges = false;
@@ -50,7 +51,11 @@
                                 });
                         });
                     }
-                    ProfilesService.updateUserFriendslist(vm.user.steamid).then(function(response) {
+                    var array1 = vm.user.historical.addedFriends.concat(vm.changes.addedFriends);
+                    var array2 = vm.user.historical.deletedFriends.concat(vm.changes.deletedFriends);
+                    var historical = {'addedFriends' : array1, 'deletedFriends' : array2}
+                    console.log(historical)
+                    ProfilesService.updateUserFriendslist(vm.user.steamid, historical).then(function(response) {
                             AlertService.addAlert('success', 'Stored list updated!');
                         })
                         .catch(function(data) {
@@ -59,7 +64,6 @@
                 })
                 .catch(function(data) {
                     AlertService.addAlert('danger', 'Stored list was not updated!');
-                    vm.changes = {};
                     vm.changes.addedFriends = [];
                     vm.changes.deletedFriends = [];
                     vm.internalError = true;
