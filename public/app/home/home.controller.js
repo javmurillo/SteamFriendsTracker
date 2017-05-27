@@ -5,11 +5,11 @@
         .module('app.home')
         .controller('HomeController', HomeController);
 
-    HomeController.inject = ['$http', 'LoginService', 'ProfilesService'];
+    HomeController.inject = ['$http', 'LoginService', 'ProfilesService', 'AlertService'];
 
-    function HomeController($http, LoginService, ProfilesService) {
+    function HomeController($http, LoginService, ProfilesService, AlertService, LoadLoginData) {
         var vm = this;
-
+        console.log(LoadLoginData)
         vm.isLogged = isLogged;
         vm.userLogged = userLogged;
         vm.getDateByTimestamp = getDateByTimestamp;
@@ -22,9 +22,7 @@
             var i = 0;
             var j = 0;
             ProfilesService.getUserChanges(vm.user.steamid).then(function(response) {
-                    console.log("primero");
                     vm.changes = response.data;
-                    console.log(vm.changes)
                     if (vm.changes.addedFriends.length < 1 && vm.changes.deletedFriends.length < 1) {
                         vm.noChanges = true;
                     } else {
@@ -53,16 +51,14 @@
                         });
                     }
                     ProfilesService.updateUserFriendslist(vm.user.steamid).then(function(response) {
-                            console.log(response);
+                            AlertService.addAlert('success', 'Stored list updated!');
                         })
                         .catch(function(data) {
-                            console.log(data);
-
-                            vm.internalError = true;
+                            AlertService.addAlert('danger', 'Stored list was not updated!');
                         });
                 })
                 .catch(function(data) {
-                    console.log(data);
+                    AlertService.addAlert('danger', 'Stored list was not updated!');
                     vm.changes = {};
                     vm.changes.addedFriends = [];
                     vm.changes.deletedFriends = [];

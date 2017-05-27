@@ -11,8 +11,7 @@
             'app.friendslist',
             'app.login',
             'app.profiles',
-            'app.layout',
-            'app.layout.navbar'
+            'app.layout'
         ])
         .config(function($stateProvider, $urlRouterProvider, $logProvider, $locationProvider) {
             $logProvider.debugEnabled(true);

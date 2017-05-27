@@ -152,7 +152,6 @@ app.get('/api/steam/friendslist/:steamid', function(req, res) {
 //          "MongooDB error"
 //    404 - Not Found. Return "User not found".
 app.patch('/api/users/:steamid', function(req, res) {
-  return res.sendStatus(500);
     var steamid = req.params.steamid;
     var date = new Date();
     steam.getFriendList({
