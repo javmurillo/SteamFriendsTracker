@@ -1,0 +1,84 @@
+<style>
+   .gray {
+   background-color: #f4f4f4!important;
+   }
+   .pink {
+   background-color: #ffd5d5!important;
+   }
+   /* unvisited link */
+   a:link, a:hover, a:visited {
+   color: white;
+   }
+   .border-right {
+   border-right: 1px solid lightgrey;
+   }
+</style>
+<div class="jumbotron" ng-if="!vm.isLogged()">
+   <div class="container text-center">
+      <p>Sign in with <b>Steam</b> in order to check any changes in your friendlist!</p>
+   </div>
+</div>
+<!--<center><h1>Welcome back {{vm.user.displayName}}</h1>   </center> -->
+<div class="container" ng-if="vm.isLogged()">
+   <div class="row">
+      <div class="col-md-6">
+         <div class="text-center">
+            <h1><span class="label label-success">{{vm.user.historical.addedFriends.length}}</span> New Friends</h1>
+         </div>
+         <br/><br/>
+         <div class="jumbotron gray text-center" ng-if="vm.user.historical.addedFriends.length < 1 && !vm.emptyArrays">
+            <p><b>Nobody</b> loves you (at the moment)!</p>
+         </div>
+         <table ng-table="vm.addedFriendsTable" class="table table-striped" show-filter="true">
+            <tr ng-repeat="user in $data" style="text-align: center" data-toggle="collapse"
+               data-target="#{{row.nombreProducto}}" ng-show="!vm.isLoading">
+
+                  <td align="center" title="'Avatar'">
+                     <img ng-src="{{user.avatar}}">
+                  </td>
+                  <td align="center" title="'Username'" filter="{ personaname: 'text'}" sortable="'personaname'">
+                     {{user.personaname}}
+                  </td>
+                  <td align="center" title="'SteamID'" filter="{ steamid: 'text'}" sortable="'steamid'">
+                     <span class="label label-default"><a ng-href="{{user.profileurl}}" target="_blank">Steam Profile</a></span>
+                     <small><i>{{user.steamid}}</i></small>
+                  </td>
+                  <td align="center" title="'Date'" filter="{ friendSince: 'text'}" sortable="'friendSince'">
+                     {{vm.getDateByTimestamp(user.friendSince)}}
+                  </td>
+            </tr>
+            <tr ng-show="vm.isLoading">
+                <td colspan="10" class="text-center">Loading ... </td>
+            </tr>
+         </table>
+      </div>
+      <div class="col-md-6">
+         <div class="text-center">
+            <h1><span class="label label-danger">{{vm.user.historical.deletedFriends.length}}</span> Deleted Friends</h1>
+         </div>
+         <br/><br/>
+         <div class="jumbotron text-center" ng-if="vm.user.historical.deletedFriends < 1 && !vm.emptyArrays">
+            <p><b>Nobody</b> hates you (at the moment)!</p>
+         </div>
+         <div class="media border-right" ng-repeat="user in vm.deletedProfiles">
+            <a class="pull-left" href="#">
+            <img class="media-object dp img-circle" ng-src="{{user.avatarmedium}}" style="width: 100px;height:100px;">
+            </a>
+            <ul>
+               <li class="media-body">
+                  <h4 class="media-heading">{{user.personaname}}  <small>{{user.steamid}}</small></h4>
+                  <h5><b>Friends since:</b> {{vm.getDateByTimestamp(user.friendSince)}}</h5>
+                  <hr style="margin:8px auto">
+                  <span class="label label-default"><a ng-href="{{user.profileurl}}" target="_blank">Steam Profile</a></span>
+                  <span class="label label-primary"><a ng-href="{{user.profileurl}}screenshots" target="_blank">Screenshots</a></span>
+                  <span class="label label-info"><a ng-href="{{user.profileurl}}friends" target="_blank">Friends</a></span>
+               </li>
+               <br/>
+            </ul>
+         </div>
+      </div>
+   </div>
+   <div class="jumbotron text-center"  ng-if="vm.emptyArrays">
+      <p>You have not <b>added</b> and <b>deleted</b> any friends yet!</p>
+   </div>
+</div>

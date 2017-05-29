@@ -6,17 +6,9 @@
         .factory('LoginService', LoginService);
 
     function LoginService($http, $window) {
+        console.log("LoginService called")
         var vm = this;
         vm.user = null;
-        var getIdentity = $http.get("/api/identity").then(
-            function(response) { //success
-                console.log("User logged in.");
-                return vm.user = response.data;
-            },
-            function(response) { //error
-                console.log("User not logged in.");
-            }
-        );
 
         var service = {
             getIdentity: getIdentity,
@@ -27,6 +19,16 @@
         };
 
         return service;
+
+        function getIdentity() {
+            return $http.get("/api/identity").then(function(response) {
+              console.log("GET api/identity - User variable updated.")
+                return vm.user = response.data;
+            })
+            .catch(function(data) {
+              console.log(data);
+            });
+        }
 
         function loginRedirect() {
             $window.location.href = '/auth/steam';

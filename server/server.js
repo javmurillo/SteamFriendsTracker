@@ -52,10 +52,6 @@ passport.use(new SteamStrategy({
                 $set: {
                     displayName: displayName,
                     photos: photos,
-                    historical: {
-                          "addedFriends" : [],
-                          "deletedFriends" : []
-                      },
                     updated_at: date
                 }
             }, {
@@ -175,7 +171,7 @@ app.patch('/api/users', function(req, res) {
             }, {
                 $set: {
                     friendslist: data.friendslist,
-                   historical: historical,
+                    historical: historical,
                     updated_at: date
                 }
             }, {

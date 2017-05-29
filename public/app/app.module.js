@@ -9,6 +9,7 @@
             'angular-loading-bar',
             'app.home',
             'app.friendslist',
+            'app.historical',
             'app.login',
             'app.profiles',
             'app.layout'
@@ -24,10 +25,9 @@
                     controller: 'HomeController as vm',
                     resolve: {
                         'LoadLoginData': function(LoginService) {
-                            return LoginService.getIdentity;
+                            return LoginService.getIdentity();
                         }
                     }
-
                 })
                 .state('friendslist', {
                     url: '/friendslist',
@@ -35,7 +35,17 @@
                     controller: 'FriendslistController as vm',
                     resolve: {
                         'LoadLoginData': function(LoginService) {
-                            return LoginService.getIdentity;
+                            return LoginService.getIdentity();
+                        }
+                    }
+                })
+                .state('historical', {
+                    url: '/historical',
+                    templateUrl: 'app/historical/historical.html',
+                    controller: 'HistoricalController as vm',
+                    resolve: {
+                        'LoadLoginData': function(LoginService) {
+                            return LoginService.getIdentity();
                         }
                     }
                 });

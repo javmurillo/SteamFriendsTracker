@@ -7,14 +7,23 @@
 
     HomeController.inject = ['$http', 'LoginService', 'ProfilesService', 'AlertService'];
 
-    function HomeController($http, LoginService, ProfilesService, AlertService) {
-        var vm = this;
+    function HomeController($http, LoginService, ProfilesService, AlertService, LoadLoginData) {
+        console.log("HomeController called.");
 
+        var vm = this;
         vm.isLogged = isLogged;
-        vm.userLogged = userLogged;
         vm.getDateByTimestamp = getDateByTimestamp;
+
         if (isLogged()) {
-            vm.user = userLogged();
+            vm.user = LoginService.userLogged();
+            //New user with no historical
+            if (vm.user.historical == undefined) {
+                var historical = {
+                    "addedFriends" : [],
+                    "deletedFriends" : []
+                }
+                vm.user.historical = historical;
+            }
             vm.changes = {};
             vm.addedProfiles = {};
             vm.deletedProfiles = {};
@@ -27,6 +36,7 @@
                     if (vm.changes.addedFriends.length < 1 && vm.changes.deletedFriends.length < 1) {
                         vm.noChanges = true;
                     } else {
+                        console.log(vm.changes);
                         vm.changes.addedFriends.forEach(function(user) {
                             ProfilesService.getFriendProfile(user.steamid)
                                 .then(function(response) {
@@ -51,9 +61,18 @@
                                 });
                         });
                     }
+
                     var array1 = vm.user.historical.addedFriends.concat(vm.changes.addedFriends);
+                    console.log("array1 - Concatenacion added historical y changes")
+                    console.log(array1)
                     var array2 = vm.user.historical.deletedFriends.concat(vm.changes.deletedFriends);
-                    var historical = {'addedFriends' : array1, 'deletedFriends' : array2}
+                    console.log("array2 - Concatenacion deleted historical y changes")
+                    console.log(array2)
+                    var historical = {
+                        'addedFriends': array1,
+                        'deletedFriends': array2
+                    }
+                    console.log("HISTORICAL")
                     console.log(historical)
                     ProfilesService.updateUserFriendslist(vm.user.steamid, historical).then(function(response) {
                             AlertService.addAlert('success', 'Stored list updated!');
@@ -77,10 +96,5 @@
         function isLogged() {
             return LoginService.isLogged();
         }
-
-        function userLogged() {
-            return LoginService.userLogged();
-        }
-
     }
 })();

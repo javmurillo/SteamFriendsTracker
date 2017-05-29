@@ -6,6 +6,7 @@
         .service('ProfilesService', ProfilesService);
 
     function ProfilesService($http, $cacheFactory) {
+        console.log("ProfilesService called.");
         var vm = this;
         var cache = $cacheFactory('myCache');
 
