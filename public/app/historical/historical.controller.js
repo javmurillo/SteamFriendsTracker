@@ -16,9 +16,8 @@
 
         if (isLogged()) {
             vm.user = LoginService.userLogged();
-            vm.addedProfiles = {};
-            vm.deletedProfiles = {};
-            vm.addedArray = [];
+            vm.addedProfiles = [];
+            vm.deletedProfiles = [];
             vm.friendSinceArray = [];
             vm.isLoading = true;
             var i = 0;
@@ -28,25 +27,24 @@
             }
             else {
               var promises = [];
-
                vm.user.historical.addedFriends.forEach(function(user) {
                    promises.push(ProfilesService.getFriendProfile(user.steamid));
-                   vm.friendSinceArray[i] = user.friend_since;
+                   vm.friendSinceArray[i] = new Date(getDateByTimestamp(user.friend_since));
                    i++;
                })
                var i = 0;
-
-
                $q.all(promises).then(function(response) {
                  response.forEach(function(response) {
                    vm.addedProfiles[i] = response.data.response.players[0];
-                   vm.addedProfiles[i]['friendSince'] = vm.friendSinceArray[i]
-                   vm.addedArray.push(vm.addedProfiles[i]);
+                   vm.addedProfiles[i]['friendsSince'] = vm.friendSinceArray[i]
                    i++;
                  })
-                 vm.addedFriendsTable = new NgTableParams({count: 10}, {dataset: vm.addedArray, counts: [5, 10, 20]});
+                 vm.addedFriendsTable = new NgTableParams({count: 10}, {dataset: vm.addedProfiles, counts: [5, 10, 20]});
                  vm.isLoading = false;
 
+              })
+              .catch(function(data) {
+                  vm.internalError = true;
               });
 
               /*vm.user.historical.addedFriends.forEach(function(user) {
@@ -76,7 +74,7 @@
                       });
               });
 
-              console.log(vm.addedArray);
+              console.log(vm.addedProfiles);
 
               //vm.tableParams = new NgTableParams({}, { dataset: vm.addedArray});
 

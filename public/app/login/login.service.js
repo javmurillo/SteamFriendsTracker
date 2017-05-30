@@ -26,7 +26,7 @@
                 return vm.user = response.data;
             })
             .catch(function(data) {
-              console.log(data);
+              return vm.internalError = true;
             });
         }
 

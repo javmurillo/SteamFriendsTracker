@@ -10,6 +10,7 @@
             'app.home',
             'app.friendslist',
             'app.historical',
+            'app.stats',
             'app.login',
             'app.profiles',
             'app.layout'
@@ -43,6 +44,16 @@
                     url: '/historical',
                     templateUrl: 'app/historical/historical.html',
                     controller: 'HistoricalController as vm',
+                    resolve: {
+                        'LoadLoginData': function(LoginService) {
+                            return LoginService.getIdentity();
+                        }
+                    }
+                })
+                .state('stats', {
+                    url: '/stats',
+                    templateUrl: 'app/stats/stats.html',
+                    controller: 'StatsController as vm',
                     resolve: {
                         'LoadLoginData': function(LoginService) {
                             return LoginService.getIdentity();

@@ -1,7 +1,7 @@
 <style>
    .pink {
-       background-color: #ffd5d5!important;
-     }
+   background-color: #ffd5d5!important;
+   }
    /* unvisited link */
    a:link, a:hover, a:visited {
    color: white;
@@ -9,49 +9,62 @@
    .border-right {
    border-right: 1px solid lightgrey;
    }
-}
+   }
 </style>
+<div class="jumbotron" ng-if="!vm.isLogged()">
+   <div class="container text-center">
+      <p>Sign in with <b>Steam</b> in order to check any changes in your friendlist!</p>
+   </div>
+</div>
 <!--<center><h1>Welcome back {{vm.user.displayName}}</h1>   </center> -->
 <div class="container" ng-if="vm.isLogged()">
    <div class="text-center">
       <h1><span class="label label-primary">{{vm.friendslist.length}}</span> Total Friends</h1>
    </div>
-   <br/> <br/><br/>
-   <div class="jumbotron pink text-center" ng-if="vm.internalError">
-      <p>Oops! Something went <b>wrong</b>.</p>
+   <br/>
+
+   <div class="form-group">
+      <center>
+         <h1>Search by <b>Username</b>, <b>SteamID</b>, or <b>Date</b></h1>
+      </center>
+      <input type="text" class="form-control" placeholder="Insert Username, SteamID, or Date" ng-model="vm.search" ng-change="vm.filter(vm.search)">
    </div>
-   <div class="row" ng-repeat="user in vm.users" ng-switch on="$index % 2">
+   <br/><br/>
+   <div class="jumbotron pink text-center" ng-if="vm.internalError">
+      <p>Oops! Server <b>could not get</b> the profiles.</p>
+   </div>
+   <div class="row" ng-repeat="user in vm.filteredUsers" ng-switch on="$index % 2">
       <div class="col-md-6" ng-switch-when="0">
          <div class="media border-right">
             <a class="pull-left" href="#">
-            <img class="media-object dp img-circle" ng-src="{{vm.users[$index].avatarmedium}}" style="width: 100px;height:100px;">
+            <img class="media-object dp img-circle" ng-src="{{vm.filteredUsers[$index].avatarmedium}}" style="width: 100px;height:100px;">
             </a>
             <ul>
                <li class="media-body">
-                  <h4 class="media-heading">{{vm.users[$index].personaname}}  <small>{{vm.users[$index].steamid}}</small></h4>
-                  <h5><b>Friends since:</b> {{vm.getDateByTimestamp(vm.users[$index].friendSince)}}</h5>
+                  <h4 class="media-heading">{{vm.filteredUsers[$index].personaname}}  <small>{{vm.filteredUsers[$index].steamid}}</small></h4>
+                  <h5><b>Friends since:</b> {{vm.filteredUsers[$index].friendsSince}}</h5>
                   <hr style="margin:8px auto">
-                  <span class="label label-default"><a ng-href="{{vm.users[$index].profileurl}}" target="_blank">Steam Profile</a></span>
-                  <span class="label label-primary"><a ng-href="{{vm.users[$index].profileurl}}screenshots" target="_blank">Screenshots</a></span>
-                  <span class="label label-info"><a ng-href="{{vm.users[$index].profileurl}}friends" target="_blank">Friends</a></span>
+                  <span class="label label-default"><a ng-href="{{vm.filteredUsers[$index].profileurl}}" target="_blank">Steam Profile</a></span>
+                  <span class="label label-primary"><a ng-href="{{vm.filteredUsers[$index].profileurl}}screenshots" target="_blank">Screenshots</a></span>
+                  <span class="label label-info"><a ng-href="{{vm.filteredUsers[$index].profileurl}}friends" target="_blank">Friends</a></span>
                </li>
                <br/>
             </ul>
          </div>
       </div>
-      <div class="col-md-6" ng-switch-when="0" ng-show="vm.users[$index+1]">
+      <div class="col-md-6" ng-switch-when="0" ng-show="vm.filteredUsers[$index+1]">
          <div class="media border-right">
             <a class="pull-left" href="#">
-            <img class="media-object dp img-circle" ng-src="{{vm.users[$index+1].avatarmedium}}" style="width: 100px;height:100px;">
+            <img class="media-object dp img-circle" ng-src="{{vm.filteredUsers[$index+1].avatarmedium}}" style="width: 100px;height:100px;">
             </a>
             <ul>
                <li class="media-body">
-                  <h4 class="media-heading">{{vm.users[$index+1].personaname}}  <small>{{vm.users[$index+1].steamid}}</small></h4>
-                  <h5><b>Friends since:</b> {{vm.getDateByTimestamp(vm.users[$index+1].friendSince)}}</h5>
+                  <h4 class="media-heading">{{vm.filteredUsers[$index+1].personaname}}  <small>{{vm.filteredUsers[$index+1].steamid}}</small></h4>
+                  <h5><b>Friends since:</b> {{vm.filteredUsers[$index+1].friendsSince}}</h5>
                   <hr style="margin:8px auto">
-                  <span class="label label-default"><a ng-href="{{vm.users[$index+1].profileurl}}" target="_blank">Steam Profile</a></span>
-                  <span class="label label-primary"><a ng-href="{{vm.users[$index+1].profileurl}}screenshots" target="_blank">Screenshots</a></span>
-                  <span class="label label-info"><a ng-href="{{vm.users[$index+1].profileurl}}friends" target="_blank">Friends</a></span>
+                  <span class="label label-default"><a ng-href="{{vm.filteredUsers[$index+1].profileurl}}" target="_blank">Steam Profile</a></span>
+                  <span class="label label-primary"><a ng-href="{{vm.filteredUsers[$index+1].profileurl}}screenshots" target="_blank">Screenshots</a></span>
+                  <span class="label label-info"><a ng-href="{{vm.filteredUsers[$index+1].profileurl}}friends" target="_blank">Friends</a></span>
                </li>
                <br/>
             </ul>

@@ -23,42 +23,44 @@
    <div class="row">
       <div class="col-md-6">
          <div class="text-center">
-            <h1><span class="label label-success">{{vm.user.historical.addedFriends.length}}</span> New Friends</h1>
+            <h1><span class="label label-success">{{vm.user.historical.addedFriends.length}}</span> Saved Friends</h1>
          </div>
          <br/><br/>
          <div class="jumbotron gray text-center" ng-if="vm.user.historical.addedFriends.length < 1 && !vm.emptyArrays">
-            <p><b>Nobody</b> loves you (at the moment)!</p>
+            <p>Saved friends <b>log</b> is empty!</p>
          </div>
-         <table ng-table="vm.addedFriendsTable" class="table table-striped" show-filter="true">
+         <div class="jumbotron pink text-center" ng-if="vm.internalError">
+            <p>Oops! Server <b>could not get</b> the profiles.</p>
+         </div>
+         <table ng-show="vm.user.historical.addedFriends.length >= 1 && !vm.internalError" ng-table="vm.addedFriendsTable" class="table table-striped" show-filter="true">
             <tr ng-repeat="user in $data" style="text-align: center" data-toggle="collapse"
                data-target="#{{row.nombreProducto}}" ng-show="!vm.isLoading">
-
-                  <td align="center" title="'Avatar'">
-                     <img ng-src="{{user.avatar}}">
-                  </td>
-                  <td align="center" title="'Username'" filter="{ personaname: 'text'}" sortable="'personaname'">
-                     {{user.personaname}}
-                  </td>
-                  <td align="center" title="'SteamID'" filter="{ steamid: 'text'}" sortable="'steamid'">
-                     <span class="label label-default"><a ng-href="{{user.profileurl}}" target="_blank">Steam Profile</a></span>
-                     <small><i>{{user.steamid}}</i></small>
-                  </td>
-                  <td align="center" title="'Date'" filter="{ friendSince: 'text'}" sortable="'friendSince'">
-                     {{vm.getDateByTimestamp(user.friendSince)}}
-                  </td>
+               <td align="center" title="'Avatar'">
+                  <img ng-src="{{user.avatar}}">
+               </td>
+               <td align="center" title="'Username'" filter="{ personaname: 'text'}" sortable="'personaname'">
+                  {{user.personaname}}
+               </td>
+               <td align="center" title="'SteamID'" filter="{ steamid: 'text'}" sortable="'steamid'">
+                  <span class="label label-default"><a ng-href="{{user.profileurl}}" target="_blank">Steam Profile</a></span>
+                  <small><i>{{user.steamid}}</i></small>
+               </td>
+               <td align="center" title="'Date'" filter="{ friendsSince: 'text'}" sortable="'friendsSince'">
+                  {{user.friendsSince | date}}
+               </td>
             </tr>
             <tr ng-show="vm.isLoading">
-                <td colspan="10" class="text-center">Loading ... </td>
+               <td colspan="10" class="text-center">Loading ... </td>
             </tr>
          </table>
       </div>
       <div class="col-md-6">
          <div class="text-center">
-            <h1><span class="label label-danger">{{vm.user.historical.deletedFriends.length}}</span> Deleted Friends</h1>
+            <h1><span class="label label-danger">{{vm.user.historical.deletedFriends.length}}</span> Removed Friends</h1>
          </div>
          <br/><br/>
          <div class="jumbotron text-center" ng-if="vm.user.historical.deletedFriends < 1 && !vm.emptyArrays">
-            <p><b>Nobody</b> hates you (at the moment)!</p>
+            <p>Removed friends <b>log</b> is empty!</p>
          </div>
          <div class="media border-right" ng-repeat="user in vm.deletedProfiles">
             <a class="pull-left" href="#">

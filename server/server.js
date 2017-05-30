@@ -130,6 +130,7 @@ app.get('/api/steam/profile/:steamid', ensureAuthenticated, function(req, res) {
 //    200 - OK. Return the steam friendslist given by the steamid
 //    500 - Internal Server Error. Return "Steam API call error."
 app.get('/api/steam/friendslist/:steamid', ensureAuthenticated, function(req, res) {
+
     var steamid = req.params.steamid;
     steam.getFriendList({
         steamid: steamid,
