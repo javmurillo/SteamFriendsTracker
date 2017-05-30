@@ -59,7 +59,7 @@
             <h1><span class="label label-danger">{{vm.user.historical.deletedFriends.length}}</span> Removed Friends</h1>
          </div>
          <br/><br/>
-         <div class="jumbotron text-center" ng-if="vm.user.historical.deletedFriends < 1 && !vm.emptyArrays">
+         <div class="jumbotron gray text-center" ng-if="vm.user.historical.deletedFriends < 1 && !vm.emptyArrays">
             <p>Removed friends <b>log</b> is empty!</p>
          </div>
          <div class="media border-right" ng-repeat="user in vm.deletedProfiles">
@@ -80,7 +80,11 @@
          </div>
       </div>
    </div>
-   <div class="jumbotron text-center"  ng-if="vm.emptyArrays">
+   <div class="jumbotron gray text-center" ng-if="vm.emptyArrays && !vm.noHistorical">
       <p>You have not <b>added</b> and <b>deleted</b> any friends yet!</p>
+   </div>
+   <div class="jumbotron pink text-center" ng-if="vm.noHistorical">
+      <p>Oops! It seems you do not have any friendslist <b>stored</b>.</p>
+      <p>Please, go <b>Home</b> (make sure your profile is set to <b>Public</b>).</p>
    </div>
 </div>

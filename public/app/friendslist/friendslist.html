@@ -9,7 +9,6 @@
    .border-right {
    border-right: 1px solid lightgrey;
    }
-   }
 </style>
 <div class="jumbotron" ng-if="!vm.isLogged()">
    <div class="container text-center">
@@ -22,7 +21,6 @@
       <h1><span class="label label-primary">{{vm.friendslist.length}}</span> Total Friends</h1>
    </div>
    <br/>
-
    <div class="form-group">
       <center>
          <h1>Search by <b>Username</b>, <b>SteamID</b>, or <b>Date</b></h1>
@@ -32,6 +30,9 @@
    <br/><br/>
    <div class="jumbotron pink text-center" ng-if="vm.internalError">
       <p>Oops! Server <b>could not get</b> the profiles.</p>
+   </div>
+   <div class="jumbotron pink text-center" ng-if="vm.privateProfile">
+      <p>Oops! It seems your profile is set to <b>private</b>.</p>
    </div>
    <div class="row" ng-repeat="user in vm.filteredUsers" ng-switch on="$index % 2">
       <div class="col-md-6" ng-switch-when="0">

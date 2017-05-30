@@ -19,8 +19,8 @@
             //New user with no historical
             if (vm.user.historical == undefined) {
                 var historical = {
-                    "addedFriends" : [],
-                    "deletedFriends" : []
+                    "addedFriends": [],
+                    "deletedFriends": []
                 }
                 vm.user.historical = historical;
             }
@@ -29,6 +29,7 @@
             vm.deletedProfiles = {};
             vm.noChanges = false;
             vm.internalError = false;
+            vm.privateProfile = false;
             var i = 0;
             var j = 0;
             ProfilesService.getUserChanges(vm.user.steamid).then(function(response) {
@@ -36,7 +37,6 @@
                     if (vm.changes.addedFriends.length < 1 && vm.changes.deletedFriends.length < 1) {
                         vm.noChanges = true;
                     } else {
-                        console.log(vm.changes);
                         vm.changes.addedFriends.forEach(function(user) {
                             ProfilesService.getFriendProfile(user.steamid)
                                 .then(function(response) {
@@ -78,6 +78,9 @@
                             AlertService.addAlert('success', 'Stored list updated!');
                         })
                         .catch(function(data) {
+                            if (data.data.error == "Profile set to private") {
+                                vm.privateProfile = true;
+                            }
                             AlertService.addAlert('danger', 'Stored list was not updated!');
                         });
                 })
@@ -85,7 +88,10 @@
                     AlertService.addAlert('danger', 'Stored list was not updated!');
                     vm.changes.addedFriends = [];
                     vm.changes.deletedFriends = [];
-                    vm.internalError = true;
+
+                    if (data.data.error == "Profile set to private") {
+                        vm.privateProfile = true;
+                    } else vm.internalError = true;
                 });
         }
 

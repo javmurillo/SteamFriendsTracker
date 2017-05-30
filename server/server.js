@@ -112,25 +112,24 @@ app.get('/api/identity', ensureAuthenticated, function(req, res) {
 //    200 - OK. Return the steam profile(s) (without friendslist) given by the steamid(s)
 //    500 - Internal Server Error. Return "Steam API call error"
 app.get('/api/steam/profile/:steamid', ensureAuthenticated, function(req, res) {
-      var steamid = req.params.steamid;
-      var steamidArray = [];
-      steamidArray.push(steamid);
-      steam.getPlayerSummaries({
-          steamids: steamidArray,
-          callback: function(err, data) {
+    var steamid = req.params.steamid;
+    var steamidArray = [];
+    steamidArray.push(steamid);
+    steam.getPlayerSummaries({
+        steamids: steamidArray,
+        callback: function(err, data) {
             if (err) return res.status(500).json({
                 error: "Steam API call error"
             });
             res.status(200).json(data);
-          }
-      })
+        }
+    })
 });
 
 // GET /api/steam/friendslist/
 //    200 - OK. Return the steam friendslist given by the steamid
 //    500 - Internal Server Error. Return "Steam API call error."
 app.get('/api/steam/friendslist/:steamid', ensureAuthenticated, function(req, res) {
-
     var steamid = req.params.steamid;
     steam.getFriendList({
         steamid: steamid,
@@ -147,8 +146,8 @@ app.get('/api/steam/friendslist/:steamid', ensureAuthenticated, function(req, re
 // PATCH /api/users/:steamid
 //    200 - OK. If user's stored friendslist updated successfully.
 //    500 - Internal Server Error.
-//          Return "Steam API call error" or
-//          "MongooDB error"
+//          Return "Steam API call error",
+//          "MongooDB error", or "Profile set to private".
 //    404 - Not Found. Return "User not found".
 app.patch('/api/users', function(req, res) {
     console.log("PATCH /api/users/:steamid");
@@ -165,6 +164,9 @@ app.patch('/api/users', function(req, res) {
         callback: function(err, data) {
             if (err) return res.status(500).json({
                 error: "Steam API call error"
+            });
+            else if (!data.friendslist) return res.status(500).json({
+                error: "Profile set to private"
             });
             var date = new Date();
             User.findOneAndUpdate({
@@ -192,6 +194,7 @@ app.patch('/api/users', function(req, res) {
 
 // GET /api/users/changes/:steamid
 //    200 - OK. Return user's changes (comparison between currend and stored list).
+//    204 - Return "No result. Profile set to private".
 //    500 - Internal Server Error.
 //          Return "Steam API call error." or
 //          "MongooDB error."
@@ -209,7 +212,7 @@ app.get('/api/users/changes/:steamid', ensureAuthenticated, function(req, res) {
             result['deletedFriends'] = [];
             result['addedFriends'] = [];
             var storedList = user.friendslist;
-            //New user with no friendlist
+            //New user with no friendlist or private profile
             if (storedList == undefined) res.status(200).json(result);
             else {
                 steam.getFriendList({
@@ -219,6 +222,11 @@ app.get('/api/users/changes/:steamid', ensureAuthenticated, function(req, res) {
                         if (err) return res.status(500).json({
                             error: "Steam API call error"
                         });
+                        else if (!data.friendslist) {
+                            return res.status(500).json({
+                                error: "Profile set to private"
+                            });
+                        }
                         var currentList = data.friendslist;
                         var mergedJson = currentList.friends.concat(storedList.friends);
                         var currentListAux = {};
