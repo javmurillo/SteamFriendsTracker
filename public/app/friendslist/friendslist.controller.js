@@ -23,28 +23,27 @@
 
             ProfilesService.getUserFriendslist(vm.user.steamid)
                 .then(function(response) {
-                    if (!response.data.friendslist) {
-                        vm.privateProfile = true;
-                        vm.friendslist = [];
-                    } else {
-                        vm.friendslist = response.data.friendslist.friends;
-                        var i = 0;
-                        vm.friendslist.forEach(function(user) {
-                            ProfilesService.getFriendProfile(user.steamid)
-                                .then(function(response) {
-                                    vm.users[i] = response.data.response.players[0];
-                                    vm.users[i]['friendsSince'] = getDateByTimestamp(user.friend_since);
-                                    i++;
-                                })
-                                .catch(function(data) {
-                                    vm.internalError = true;
-                                });
-                        });
-                    }
+                      var i = 0;
+                      vm.friendslist = response.data.friendslist.friends;
+                      vm.friendslist.forEach(function(user) {
+                          ProfilesService.getFriendProfile(user.steamid)
+                              .then(function(response) {
+                                  vm.users[i] = response.data.response.players[0];
+                                  vm.users[i]['friendsSince'] = getDateByTimestamp(user.friend_since);
+                                  i++;
+                              })
+                              .catch(function(data) {
+                                  vm.internalError = true;
+                              });
+                      });
+
                 })
                 .catch(function(data) {
                     vm.friendslist = [];
-                    vm.internalError = true;
+                    if (data.data.error == "Profile set to private") {
+                        vm.privateProfile = true;
+                    }
+                    else vm.internalError = true;
                 });
             vm.filteredUsers = vm.users;
         }
@@ -60,7 +59,6 @@
                     vm.users[i].steamid.toLowerCase().startsWith(query.toLowerCase()) ||
                     vm.users[i].friendsSince.toLowerCase().includes(query.toLowerCase())) {
                     vm.filteredUsers.push(vm.users[i]);
-                    console.log(vm.filteredUsers);
                 }
             }
         }

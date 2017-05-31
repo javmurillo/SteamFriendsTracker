@@ -97,6 +97,7 @@ app.get('/auth/steam',
 // GET /logout
 //   Destroys the session
 app.get('/logout', function(req, res) {
+    console.log("GET /logout");
     req.session.destroy(function(err) {
         res.redirect('/');
     });
@@ -105,6 +106,7 @@ app.get('/logout', function(req, res) {
 // GET /api/identity
 //    Return the user profile
 app.get('/api/identity', ensureAuthenticated, function(req, res) {
+    console.log("GET /api/identity");
     res.status(200).json(req.user);
 });
 
@@ -112,6 +114,7 @@ app.get('/api/identity', ensureAuthenticated, function(req, res) {
 //    200 - OK. Return the steam profile(s) (without friendslist) given by the steamid(s)
 //    500 - Internal Server Error. Return "Steam API call error"
 app.get('/api/steam/profile/:steamid', ensureAuthenticated, function(req, res) {
+    console.log("GET /api/steam/profile/:steamid");
     var steamid = req.params.steamid;
     var steamidArray = [];
     steamidArray.push(steamid);
@@ -129,7 +132,9 @@ app.get('/api/steam/profile/:steamid', ensureAuthenticated, function(req, res) {
 // GET /api/steam/friendslist/
 //    200 - OK. Return the steam friendslist given by the steamid
 //    500 - Internal Server Error. Return "Steam API call error."
+//            or "Profile set to private".
 app.get('/api/steam/friendslist/:steamid', ensureAuthenticated, function(req, res) {
+    console.log("GET /api/steam/friendslist/:steamid");
     var steamid = req.params.steamid;
     steam.getFriendList({
         steamid: steamid,
@@ -137,6 +142,9 @@ app.get('/api/steam/friendslist/:steamid', ensureAuthenticated, function(req, re
         callback: function(err, data) {
             if (err) return res.status(500).json({
                 error: "Steam API call error"
+            });
+            else if (!data.friendslist) return res.status(500).json({
+                error: "Profile set to private"
             });
             res.status(200).json(data);
         }
@@ -151,12 +159,8 @@ app.get('/api/steam/friendslist/:steamid', ensureAuthenticated, function(req, re
 //    404 - Not Found. Return "User not found".
 app.patch('/api/users', function(req, res) {
     console.log("PATCH /api/users/:steamid");
-    console.log(req.body)
     var steamid = req.body.steamid;
     var historical = req.body.historical;
-    console.log(steamid)
-    console.log(historical)
-
     var date = new Date();
     steam.getFriendList({
         steamid: steamid,
@@ -196,10 +200,11 @@ app.patch('/api/users', function(req, res) {
 //    200 - OK. Return user's changes (comparison between currend and stored list).
 //    204 - Return "No result. Profile set to private".
 //    500 - Internal Server Error.
-//          Return "Steam API call error." or
-//          "MongooDB error."
+//          Return "Steam API call error.",
+//          "MongooDB error." or "Profile set to private".
 //    404 - Not Found. Return "User not found".
 app.get('/api/users/changes/:steamid', ensureAuthenticated, function(req, res) {
+    console.log("GET /api/users/changes/:steamid");
     var steamid = req.params.steamid;
     User.findOne({
         steamid: steamid
@@ -251,7 +256,6 @@ app.get('/api/users/changes/:steamid', ensureAuthenticated, function(req, res) {
                                 return true;
                             }
                         });
-                        console.log(deletedFriends)
                         result['deletedFriends'] = deletedFriends;
                         result['addedFriends'] = addedFriends;
 
@@ -259,7 +263,8 @@ app.get('/api/users/changes/:steamid', ensureAuthenticated, function(req, res) {
                     }
                 });
             }
-        } else res.status(404).json({
+        }
+        else res.status(404).json({
             error: "User not found"
         });
     });
@@ -292,8 +297,9 @@ app.listen(3000);
 
 // Simple route middleware to ensure user is authenticated.
 function ensureAuthenticated(req, res, next) {
-    console.log("ensureAuthenticated");
+    console.log("Middleware ensureAuthenticated");
     if (req.isAuthenticated()) {
         return next();
-    } else res.sendStatus(401);
+    }
+    else res.sendStatus(401);
 }

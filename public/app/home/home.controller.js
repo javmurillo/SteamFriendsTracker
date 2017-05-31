@@ -17,7 +17,8 @@
         if (isLogged()) {
             vm.user = LoginService.userLogged();
             //New user with no historical
-            if (vm.user.historical == undefined) {
+            if (!vm.user.historical) {
+                console.log("User with no historical")
                 var historical = {
                     "addedFriends": [],
                     "deletedFriends": []
@@ -40,7 +41,6 @@
                         vm.changes.addedFriends.forEach(function(user) {
                             ProfilesService.getFriendProfile(user.steamid)
                                 .then(function(response) {
-                                    console.log(response)
                                     vm.addedProfiles[i] = response.data.response.players[0];
                                     vm.addedProfiles[i]['friendSince'] = user.friend_since;
                                     i++;
@@ -63,18 +63,12 @@
                     }
 
                     var array1 = vm.user.historical.addedFriends.concat(vm.changes.addedFriends);
-                    console.log("array1 - Concatenacion added historical y changes")
-                    console.log(array1)
                     var array2 = vm.user.historical.deletedFriends.concat(vm.changes.deletedFriends);
-                    console.log("array2 - Concatenacion deleted historical y changes")
-                    console.log(array2)
                     var historical = {
                         'addedFriends': array1,
                         'deletedFriends': array2
                     }
-                    console.log("HISTORICAL")
-                    console.log(historical)
-                    ProfilesService.updateUserFriendslist(vm.user.steamid, historical).then(function(response) {
+                    ProfilesService.updateUser(vm.user.steamid, historical).then(function(response) {
                             AlertService.addAlert('success', 'Stored list updated!');
                         })
                         .catch(function(data) {

@@ -22,7 +22,7 @@
             return $http.get("/api/steam/friendslist/" + steamid);
         };
 
-        vm.updateUserFriendslist = function(steamid, historical) {
+        vm.updateUser = function(steamid, historical) {
             var data = {steamid: steamid, historical: historical};
             //$http.defaults.headers.patch["Content-Type"] = "application/json";
             return $http.patch("/api/users/", data);
