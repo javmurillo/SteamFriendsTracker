@@ -8,7 +8,7 @@
     function LayoutController() {
         var vm = this;
         vm.navline = {
-            title: 'Who-Deleted-Me'
+            title: 'SteamFriendsTracker'
         };
     }
 })();
