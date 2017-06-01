@@ -34,7 +34,7 @@
          </div>
          <table ng-show="vm.user.historical.addedFriends.length >= 1 && !vm.internalError" ng-table="vm.addedFriendsTable" class="table table-striped" show-filter="true">
             <tr ng-repeat="user in $data" style="text-align: center" data-toggle="collapse"
-               data-target="#{{row.nombreProducto}}" ng-show="!vm.isLoading">
+               data-target="#{{row.nombreProducto}}" ng-show="!vm.isLoadingAdded">
                <td align="center" title="'Avatar'">
                   <img ng-src="{{user.avatar}}">
                </td>
@@ -49,7 +49,7 @@
                   {{user.friendsSince | date}}
                </td>
             </tr>
-            <tr ng-show="vm.isLoading">
+            <tr ng-show="vm.isLoadingAdded">
                <td colspan="10" class="text-center">Loading ... </td>
             </tr>
          </table>
@@ -59,25 +59,33 @@
             <h1><span class="label label-danger">{{vm.user.historical.deletedFriends.length}}</span> Removed Friends</h1>
          </div>
          <br/><br/>
-         <div class="jumbotron gray text-center" ng-if="vm.user.historical.deletedFriends < 1 && !vm.emptyArrays">
-            <p>Removed friends <b>log</b> is empty!</p>
+         <div class="jumbotron gray text-center" ng-if="vm.user.historical.deletedFriends.length < 1 && !vm.emptyArrays">
+            <p>Saved friends <b>log</b> is empty!</p>
          </div>
-         <div class="media border-right" ng-repeat="user in vm.deletedProfiles">
-            <a class="pull-left" href="#">
-            <img class="media-object dp img-circle" ng-src="{{user.avatarmedium}}" style="width: 100px;height:100px;">
-            </a>
-            <ul>
-               <li class="media-body">
-                  <h4 class="media-heading">{{user.personaname}}  <small>{{user.steamid}}</small></h4>
-                  <h5><b>Friends since:</b> {{vm.getDateByTimestamp(user.friendSince)}}</h5>
-                  <hr style="margin:8px auto">
+         <div class="jumbotron pink text-center" ng-if="vm.internalError">
+            <p>Oops! Server <b>could not get</b> the profiles.</p>
+         </div>
+         <table ng-show="vm.user.historical.deletedFriends.length >= 1 && !vm.internalError" ng-table="vm.removedFriendsTable" class="table table-striped" show-filter="true">
+            <tr ng-repeat="user in $data" style="text-align: center" data-toggle="collapse"
+               data-target="#{{row.nombreProducto}}" ng-show="!vm.isLoadingRemoved">
+               <td align="center" title="'Avatar'">
+                  <img ng-src="{{user.avatar}}">
+               </td>
+               <td align="center" title="'Username'" filter="{ personaname: 'text'}" sortable="'personaname'">
+                  {{user.personaname}}
+               </td>
+               <td align="center" title="'SteamID'" filter="{ steamid: 'text'}" sortable="'steamid'">
                   <span class="label label-default"><a ng-href="{{user.profileurl}}" target="_blank">Steam Profile</a></span>
-                  <span class="label label-primary"><a ng-href="{{user.profileurl}}screenshots" target="_blank">Screenshots</a></span>
-                  <span class="label label-info"><a ng-href="{{user.profileurl}}friends" target="_blank">Friends</a></span>
-               </li>
-               <br/>
-            </ul>
-         </div>
+                  <small><i>{{user.steamid}}</i></small>
+               </td>
+               <td align="center" title="'Date'" filter="{ friendsSince: 'text'}" sortable="'friendsSince'">
+                  {{user.friendsSince | date}}
+               </td>
+            </tr>
+            <tr ng-show="vm.isLoadingRemoved">
+               <td colspan="10" class="text-center">Loading ... </td>
+            </tr>
+         </table>
       </div>
    </div>
    <div class="jumbotron gray text-center" ng-if="vm.emptyArrays && !vm.noHistorical">
