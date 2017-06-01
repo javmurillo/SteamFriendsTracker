@@ -36,6 +36,9 @@
                                   vm.internalError = true;
                               });
                       });
+                      console.log(vm.users);
+
+
 
                 })
                 .catch(function(data) {
@@ -46,13 +49,13 @@
                     else vm.internalError = true;
                 });
             vm.filteredUsers = vm.users;
-        }
 
-        function getDateByTimestamp(timestamp) {
-            return ProfilesService.getDateByTimestamp(timestamp);
         }
 
         function filter(query) {
+          /*vm.users.sort(function (a, b) {
+              return a.personaname.localeCompare(b.personaname);
+          });*/
             vm.filteredUsers = [];
             for (var i = 0; i < vm.users.length; i++) {
                 if (vm.users[i].personaname.toLowerCase().startsWith(query.toLowerCase()) ||
@@ -61,6 +64,10 @@
                     vm.filteredUsers.push(vm.users[i]);
                 }
             }
+        }
+
+        function getDateByTimestamp(timestamp) {
+            return ProfilesService.getDateByTimestamp(timestamp);
         }
 
         function isLogged() {
