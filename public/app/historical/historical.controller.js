@@ -73,7 +73,6 @@
 
                 console.log("Removed Friends Promises...")
                 var promises = [];
-
                 angular.forEach(vm.user.historical.deletedFriends, function(user) {
                     promises.push(ProfilesService.getFriendProfile(user.steamid));
                     vm.deletedFriendSinceArray[j] = new Date(getDateByTimestamp(user.friend_since));

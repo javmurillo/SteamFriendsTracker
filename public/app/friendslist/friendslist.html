@@ -26,6 +26,14 @@
          <h1>Search by <b>Username</b>, <b>SteamID</b>, or <b>Date</b></h1>
       </center>
       <input type="text" class="form-control" placeholder="Insert Username, SteamID, or Date" ng-model="vm.search" ng-change="vm.filter(vm.search)">
+      <br/>
+      <div align="right">
+        <select placeholder="Colour..." ng-options="option for option in vm.listOfOptions"
+        ng-model="selectedItem"
+        ng-change="vm.selectedItemChanged(selectedItem)">
+        <option value=''>- Sort By -</option>
+        </select>
+      </div>
    </div>
    <br/><br/>
    <div class="jumbotron pink text-center" ng-if="vm.internalError">

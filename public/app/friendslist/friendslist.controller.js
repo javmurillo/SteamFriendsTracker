@@ -7,7 +7,7 @@
 
     FriendslistController.inject = ['$http', 'LoginService', 'ProfilesService'];
 
-    function FriendslistController($scope, $http, LoginService, ProfilesService) {
+    function FriendslistController($http, LoginService, ProfilesService) {
         console.log("FriendslistController called.");
 
         var vm = this;
@@ -37,9 +37,6 @@
                               });
                       });
                       console.log(vm.users);
-
-
-
                 })
                 .catch(function(data) {
                     vm.friendslist = [];
