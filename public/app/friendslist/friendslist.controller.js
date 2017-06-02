@@ -7,10 +7,52 @@
 
     FriendslistController.inject = ['$http', 'LoginService', 'ProfilesService'];
 
-    function FriendslistController($http, LoginService, ProfilesService) {
+    function FriendslistController($scope, $http, LoginService, ProfilesService) {
         console.log("FriendslistController called.");
 
         var vm = this;
+
+        $scope.itemArray = [
+    {id: 1, name: 'SteamID'},
+    {id: 2, name: 'Username'},
+    {id: 3, name: 'Date'}
+];
+
+$scope.selectedItem = $scope.itemArray[0];
+
+        vm.records = [{
+            id: 1,
+            value: "SteamID",
+        }, {
+            id: 2,
+            value: "Username",
+        }, {
+            id: 3,
+            value: "Date",
+        }];
+
+        vm.sort = function (query) {
+              console.log(query)
+              if (query.id == 1) {
+                      vm.filteredUsers.sort(function (a, b) {
+                          return a.steamid.localeCompare(b.steamid);
+
+                      })
+              }
+              else if (query.id == 2) {
+                      vm.filteredUsers.sort(function (a, b) {
+                        return a.personaname.localeCompare(b.personaname);
+                      })
+              }
+              else if (query.id == 3) {
+                    console.log(vm.users)
+                      vm.filteredUsers.sort(function (a, b) {
+                          return new Date(a.friendsSince) - (new Date(b.friendsSince));
+                      })
+              }
+        }
+
+
         vm.isLogged = isLogged;
         vm.getDateByTimestamp = getDateByTimestamp;
         vm.filter = filter;
@@ -32,28 +74,23 @@
                           vm.friendSinceArray[i] = getDateByTimestamp(user.friend_since);
                           i++;
                       })
-                      console.log(steamIdsArray)
-                      var i = 0;
-
+                      i = 0;
                       ProfilesService.getFriendProfile(steamIdsArray).then(function(response) {
                         angular.forEach(response.data.response.players, function(user) {
                               vm.users = response.data.response.players;
-                              //We sort vm.users array in order to fit the vm.friendSinceArray array
+                              //We sort vm.users array in order to fit vm.friendSinceArray
                               vm.users.sort(function(a, b) {
                                     return a.steamid - b.steamid;
                               });
-                              vm.users[i]['friendsSince'] = vm.friendSinceArray[i]
+                              vm.users[i]['friendsSince'] = vm.friendSinceArray[i];
                               i++
                             })
                             console.log(vm.users)
                             vm.filteredUsers = vm.users;
-
-
                           })
                           .catch(function(data) {
                               vm.internalError = true;
                           });
-
                 })
                 .catch(function(data) {
                     vm.friendslist = [];
