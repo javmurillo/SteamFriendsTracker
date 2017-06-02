@@ -12,44 +12,39 @@
 
         var vm = this;
 
-        $scope.itemArray = [
-    {id: 1, name: 'SteamID'},
-    {id: 2, name: 'Username'},
-    {id: 3, name: 'Date'}
-];
+        $scope.itemArray = [{
+                id: 1,
+                name: 'SteamID'
+            },
+            {
+                id: 2,
+                name: 'Username'
+            },
+            {
+                id: 3,
+                name: 'Date'
+            }
+        ];
 
-$scope.selectedItem = $scope.itemArray[0];
+        $scope.selectedItem = $scope.itemArray[0];
 
-        vm.records = [{
-            id: 1,
-            value: "SteamID",
-        }, {
-            id: 2,
-            value: "Username",
-        }, {
-            id: 3,
-            value: "Date",
-        }];
+        vm.sort = function(query) {
+            console.log(query)
+            if (query.id == 1) {
+                vm.filteredUsers.sort(function(a, b) {
+                    return a.steamid.localeCompare(b.steamid);
 
-        vm.sort = function (query) {
-              console.log(query)
-              if (query.id == 1) {
-                      vm.filteredUsers.sort(function (a, b) {
-                          return a.steamid.localeCompare(b.steamid);
-
-                      })
-              }
-              else if (query.id == 2) {
-                      vm.filteredUsers.sort(function (a, b) {
-                        return a.personaname.localeCompare(b.personaname);
-                      })
-              }
-              else if (query.id == 3) {
-                    console.log(vm.users)
-                      vm.filteredUsers.sort(function (a, b) {
-                          return new Date(a.friendsSince) - (new Date(b.friendsSince));
-                      })
-              }
+                })
+            } else if (query.id == 2) {
+                vm.filteredUsers.sort(function(a, b) {
+                    return a.personaname.localeCompare(b.personaname);
+                })
+            } else if (query.id == 3) {
+                console.log(vm.users)
+                vm.filteredUsers.sort(function(a, b) {
+                    return new Date(a.friendsSince) - (new Date(b.friendsSince));
+                })
+            }
         }
 
 
@@ -67,45 +62,45 @@ $scope.selectedItem = $scope.itemArray[0];
             var i = 0;
             ProfilesService.getUserFriendslist(vm.user.steamid)
                 .then(function(response) {
-                      var i = 0;
-                      vm.friendslist = response.data.friendslist.friends;
-                      angular.forEach(vm.friendslist, function(user) {
-                          steamIdsArray.push(user.steamid);
-                          vm.friendSinceArray[i] = getDateByTimestamp(user.friend_since);
-                          i++;
-                      })
-                      i = 0;
-                      ProfilesService.getFriendProfile(steamIdsArray).then(function(response) {
-                        angular.forEach(response.data.response.players, function(user) {
-                              vm.users = response.data.response.players;
-                              //We sort vm.users array in order to fit vm.friendSinceArray
-                              vm.users.sort(function(a, b) {
+                    var i = 0;
+                    vm.friendslist = response.data.friendslist.friends;
+                    angular.forEach(vm.friendslist, function(user) {
+                        steamIdsArray.push(user.steamid);
+                        vm.friendSinceArray[i] = getDateByTimestamp(user.friend_since);
+                        i++;
+                    })
+                    console.log(steamIdsArray)
+                    i = 0;
+                    ProfilesService.getFriendProfile(steamIdsArray).then(function(response) {
+                            angular.forEach(response.data.response.players, function(user) {
+                                vm.users = response.data.response.players;
+                                //We sort vm.users array in order to fit vm.friendSinceArray
+                                vm.users.sort(function(a, b) {
                                     return a.steamid - b.steamid;
-                              });
-                              vm.users[i]['friendsSince'] = vm.friendSinceArray[i];
-                              i++
+                                });
+                                vm.users[i]['friendsSince'] = vm.friendSinceArray[i];
+                                i++
                             })
                             console.log(vm.users)
                             vm.filteredUsers = vm.users;
-                          })
-                          .catch(function(data) {
-                              vm.internalError = true;
-                          });
+                        })
+                        .catch(function(data) {
+                            vm.internalError = true;
+                        });
                 })
                 .catch(function(data) {
                     vm.friendslist = [];
                     if (data.data.error == "Profile set to private") {
                         vm.privateProfile = true;
-                    }
-                    else vm.internalError = true;
+                    } else vm.internalError = true;
                 });
 
         }
 
         function filter(query) {
-          /*vm.users.sort(function (a, b) {
-              return a.personaname.localeCompare(b.personaname);
-          });*/
+            /*vm.users.sort(function (a, b) {
+                return a.personaname.localeCompare(b.personaname);
+            });*/
             vm.filteredUsers = [];
             for (var i = 0; i < vm.users.length; i++) {
                 if (vm.users[i].personaname.toLowerCase().startsWith(query.toLowerCase()) ||

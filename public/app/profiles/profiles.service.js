@@ -22,6 +22,10 @@
             return $http.get("/api/steam/friendslist/" + steamid);
         };
 
+        vm.getVacInfo = function(steamids) {
+            return $http.get("/api/steam/vac/" + steamids, { cache: cache  });
+        };
+
         vm.updateUser = function(steamid, historical) {
             var data = {steamid: steamid, historical: historical};
             //$http.defaults.headers.patch["Content-Type"] = "application/json";

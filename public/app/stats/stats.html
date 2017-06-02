@@ -1,24 +1,27 @@
 <div class="container">
    <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-3">
          <center>
             <h3>Added Friends by Year</h3>
          </center>
-         <canvas id="bar" class="chart chart-bar"
-            chart-data="vm.dataChart1" chart-labels="vm.labelsChart1" chart-series="series">
-         </canvas>
+         <canvas id="bar" class="chart chart-bar" chart-data="vm.addedByYearChart.data" chart-labels="vm.addedByYearChart.labels"></canvas>
+         <br/>
       </div>
       <div class="col-md-1">
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
          <center>
             <h3>Accounts Age by Year</h3>
          </center>
          <canvas id="bar" class="chart chart-bar"
-            chart-data="vm.dataChart2" chart-labels="vm.labelsChart2" chart-series="series">
+            chart-data="vm.accountsAgeByYearChart.data" chart-labels="vm.accountsAgeByYearChart.labels">
          </canvas>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-1">
+      </div>
+      <div class="col-md-3">
+        <center><h3>VAC'd Friends</h3></center>
+        <canvas id="doughnut" class="chart chart-doughnut" chart-data="vm.vacChart.data" chart-labels="vm.vacChart.labels" chart-colors="vm.vacChart.colours"></canvas>
       </div>
    </div>
 </div>

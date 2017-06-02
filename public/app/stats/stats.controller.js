@@ -14,20 +14,22 @@
 
         if (isLogged()) {
             vm.user = LoginService.userLogged();
+            var promises = [];
+            var steamIdsArray = []
             var labelsAux = [];
             var labelsAux2 = [];
             var dataAux = [];
             var dataAux2 = [];
+            var dataVAC = [0];
             vm.pairKeyValue1 = [];
             vm.pairKeyValue2 = [];
             vm.users = [];
-            var promises = [];
-            var steamIdsArray = []
+            console.log(dataVAC);
             // -- ADDED FRIENDS BY YEAR CHART --
             ProfilesService.getUserFriendslist(vm.user.steamid)
                 .then(function(response) {
                     vm.friendslist = response.data.friendslist.friends;
-                    console.log(vm.friendslist);
+                    console.log(vm.friendslist.length);
                     vm.friendslist.forEach(function(user) {
                         var date = new Date(user.friend_since * 1000);
                         var year = date.getFullYear();
@@ -39,11 +41,13 @@
                     })
 
                     labelsAux.sort();
-                    vm.labelsChart1 = labelsAux;
                     vm.pairKeyValue1.forEach(function(value, key) {
                         dataAux.push(value)
                     })
-                    vm.dataChart1 = dataAux;
+                    vm.addedByYearChart = {
+                          "data": dataAux,
+                          "labels": labelsAux
+                    };
 
                     ProfilesService.getFriendProfile(steamIdsArray).then(function(response) {
                             angular.forEach(response.data.response.players, function(user) {
@@ -57,11 +61,30 @@
                                 }
                             })
                             labelsAux2.sort();
-                            vm.labelsChart2 = labelsAux2;
                             vm.pairKeyValue2.forEach(function(value, key) {
                                 dataAux2.push(value)
                             })
-                            vm.dataChart2 = dataAux2;
+                            vm.accountsAgeByYearChart = {
+                                  "data": dataAux2,
+                                  "labels": labelsAux2
+                            };
+                        })
+                        .catch(function(data) {
+                            vm.internalError = true;
+                        });
+
+                    ProfilesService.getVacInfo(steamIdsArray).then(function(response) {
+                            angular.forEach(response.data.players, function(user) {
+                              if (user.VACBanned) {
+                                dataVAC[0]++;
+                              }
+                            })
+                            dataVAC[1] = vm.friendslist.length - dataVAC[0];
+                            vm.vacChart = {
+                                  "data": dataVAC,
+                                  "labels": ['VAC Friends', 'Nice friends'],
+                                  "colours": ['#E31B54','#5BC99D']
+                                };
                         })
                         .catch(function(data) {
                             vm.internalError = true;
@@ -73,9 +96,6 @@
                 });
 
 
-
-
-            // -- HOW OLD THE FRIENDS ACCOUNT ARE CHART --
         }
 
         function getDateByTimestamp(timestamp) {

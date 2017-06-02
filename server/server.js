@@ -78,7 +78,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(express.static(__dirname + '/public'));
-app.use(serveStatic('D:/GitProjects/steam-whodeletedme/public'))
+app.use(serveStatic('D:/GitProjects/SteamFriendsTracker/public'))
 
 mongoose.connect('mongodb://localhost/whodeletedme-db');
 
@@ -115,11 +115,10 @@ app.get('/api/identity', ensureAuthenticated, function(req, res) {
 //    500 - Internal Server Error. Return "Steam API call error"
 app.get('/api/steam/profile/:steamid', ensureAuthenticated, function(req, res) {
     console.log("GET /api/steam/profile/:steamid");
-    var steamid = req.params.steamid;
-    var steamidArray = [];
-    steamidArray.push(steamid);
+    var steamids = req.params.steamid;
+
     steam.getPlayerSummaries({
-        steamids: steamidArray,
+        steamids: steamids,
         callback: function(err, data) {
             if (err) return res.status(500).json({
                 error: "Steam API call error"
@@ -270,6 +269,22 @@ app.get('/api/users/changes/:steamid', ensureAuthenticated, function(req, res) {
     });
 });
 
+// GET /api/steam/vac
+//    200 - OK. Return the VAC info of the profiles given by the steamid(s)
+//    500 - Internal Server Error. Return "Steam API call error"
+app.get('/api/steam/vac/:steamid', function(req, res) {
+    console.log("GET /api/steam/inventory/:steamid");
+    var steamids = req.params.steamid;
+    steam.getPlayerBans({
+            steamids: steamids,
+            callback: function(err,data) {
+              if (err) return res.status(500).json({
+                  error: "Steam API call error"
+              });
+              res.status(200).json(data);
+            }
+            })
+});
 
 
 // GET /auth/steam/return
@@ -288,7 +303,7 @@ app.get('/auth/steam/return',
 app.all('/*', function(req, res, next) {
     // Just send the index.html for other files to support HTML5Mode
     res.sendFile('index.html', {
-        root: 'D:/GitProjects/steam-whodeletedme/public'
+        root: 'D:/GitProjects/SteamFriendsTracker/public'
     });
 });
 
