@@ -5,13 +5,19 @@
    cursor: pointer;
    }
 </style>
+<script>
+    $(".nav li").on("click", function() {
+      $(".nav li").removeClass("active");
+      $(this).addClass("active");
+    });
+</script>
 <nav class="navbar navbar-inverse navbar-fixed-top">
      <div class="container" ng-switch on="vm.isLogged()">
           <div class="navbar-header">
          <a ui-sref="home" class="navbar-brand"  ng-click="isCollapsed=true"><span class="brand-title">{{vm.navline.title}}</span></a>
           </div>
           <ul class="nav navbar-nav">
-            <li>
+            <li class="active">
                <a ui-sref="home" id="home">
                <span class="glyphicon glyphicon-home"></span>&nbsp;
                <span>Home</span>

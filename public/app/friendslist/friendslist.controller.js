@@ -18,25 +18,42 @@
         if (isLogged()) {
             vm.user = LoginService.userLogged();
             vm.users = [];
+            vm.friendSinceArray = [];
             vm.internalError = false;
             vm.privateProfile = false;
-
+            var steamIdsArray = []
+            var i = 0;
             ProfilesService.getUserFriendslist(vm.user.steamid)
                 .then(function(response) {
                       var i = 0;
                       vm.friendslist = response.data.friendslist.friends;
-                      vm.friendslist.forEach(function(user) {
-                          ProfilesService.getFriendProfile(user.steamid)
-                              .then(function(response) {
-                                  vm.users[i] = response.data.response.players[0];
-                                  vm.users[i]['friendsSince'] = getDateByTimestamp(user.friend_since);
-                                  i++;
-                              })
-                              .catch(function(data) {
-                                  vm.internalError = true;
+                      angular.forEach(vm.friendslist, function(user) {
+                          steamIdsArray.push(user.steamid);
+                          vm.friendSinceArray[i] = getDateByTimestamp(user.friend_since);
+                          i++;
+                      })
+                      console.log(steamIdsArray)
+                      var i = 0;
+
+                      ProfilesService.getFriendProfile(steamIdsArray).then(function(response) {
+                        angular.forEach(response.data.response.players, function(user) {
+                              vm.users = response.data.response.players;
+                              //We sort vm.users array in order to fit the vm.friendSinceArray array
+                              vm.users.sort(function(a, b) {
+                                    return a.steamid - b.steamid;
                               });
-                      });
-                      console.log(vm.users);
+                              vm.users[i]['friendsSince'] = vm.friendSinceArray[i]
+                              i++
+                            })
+                            console.log(vm.users)
+                            vm.filteredUsers = vm.users;
+
+
+                          })
+                          .catch(function(data) {
+                              vm.internalError = true;
+                          });
+
                 })
                 .catch(function(data) {
                     vm.friendslist = [];
@@ -45,7 +62,6 @@
                     }
                     else vm.internalError = true;
                 });
-            vm.filteredUsers = vm.users;
 
         }
 

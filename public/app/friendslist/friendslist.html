@@ -51,7 +51,7 @@
             <ul>
                <li class="media-body">
                   <h4 class="media-heading">{{vm.filteredUsers[$index].personaname}}  <small>{{vm.filteredUsers[$index].steamid}}</small></h4>
-                  <h5><b>Friends since:</b> {{vm.filteredUsers[$index].friendsSince}}</h5>
+                  <h5><b>Friends since:</b> {{vm.filteredUsers[$index].friendsSince | date}}</h5>
                   <hr style="margin:8px auto">
                   <span class="label label-default"><a ng-href="{{vm.filteredUsers[$index].profileurl}}" target="_blank">Steam Profile</a></span>
                   <span class="label label-primary"><a ng-href="{{vm.filteredUsers[$index].profileurl}}screenshots" target="_blank">Screenshots</a></span>
@@ -69,7 +69,7 @@
             <ul>
                <li class="media-body">
                   <h4 class="media-heading">{{vm.filteredUsers[$index+1].personaname}}  <small>{{vm.filteredUsers[$index+1].steamid}}</small></h4>
-                  <h5><b>Friends since:</b> {{vm.filteredUsers[$index+1].friendsSince}}</h5>
+                  <h5><b>Friends since:</b> {{vm.filteredUsers[$index+1].friendsSince | date}}</h5>
                   <hr style="margin:8px auto">
                   <span class="label label-default"><a ng-href="{{vm.filteredUsers[$index+1].profileurl}}" target="_blank">Steam Profile</a></span>
                   <span class="label label-primary"><a ng-href="{{vm.filteredUsers[$index+1].profileurl}}screenshots" target="_blank">Screenshots</a></span>
