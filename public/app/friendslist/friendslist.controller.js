@@ -11,22 +11,8 @@
         console.log("FriendslistController called.");
 
         var vm = this;
+          $scope.sizes = [ {id: 1, name: 'SteamID'}, {id: 2, name: 'Username'}, {id: 3, name: 'Date'}];
 
-        $scope.itemArray = [{
-                id: 1,
-                name: 'SteamID'
-            },
-            {
-                id: 2,
-                name: 'Username'
-            },
-            {
-                id: 3,
-                name: 'Date'
-            }
-        ];
-
-        $scope.selectedItem = $scope.itemArray[0];
 
         vm.sort = function(query) {
             console.log(query)
@@ -69,7 +55,6 @@
                         vm.friendSinceArray[i] = getDateByTimestamp(user.friend_since);
                         i++;
                     })
-                    console.log(steamIdsArray)
                     i = 0;
                     ProfilesService.getFriendProfile(steamIdsArray).then(function(response) {
                             angular.forEach(response.data.response.players, function(user) {
@@ -81,7 +66,6 @@
                                 vm.users[i]['friendsSince'] = vm.friendSinceArray[i];
                                 i++
                             })
-                            console.log(vm.users)
                             vm.filteredUsers = vm.users;
                         })
                         .catch(function(data) {

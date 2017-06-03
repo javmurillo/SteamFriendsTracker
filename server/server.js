@@ -262,8 +262,7 @@ app.get('/api/users/changes/:steamid', ensureAuthenticated, function(req, res) {
                     }
                 });
             }
-        }
-        else res.status(404).json({
+        } else res.status(404).json({
             error: "User not found"
         });
     });
@@ -276,14 +275,14 @@ app.get('/api/steam/vac/:steamid', function(req, res) {
     console.log("GET /api/steam/inventory/:steamid");
     var steamids = req.params.steamid;
     steam.getPlayerBans({
-            steamids: steamids,
-            callback: function(err,data) {
-              if (err) return res.status(500).json({
-                  error: "Steam API call error"
-              });
-              res.status(200).json(data);
-            }
-            })
+        steamids: steamids,
+        callback: function(err, data) {
+            if (err) return res.status(500).json({
+                error: "Steam API call error"
+            });
+            res.status(200).json(data);
+        }
+    })
 });
 
 
@@ -315,6 +314,5 @@ function ensureAuthenticated(req, res, next) {
     console.log("Middleware ensureAuthenticated");
     if (req.isAuthenticated()) {
         return next();
-    }
-    else res.sendStatus(401);
+    } else res.sendStatus(401);
 }
