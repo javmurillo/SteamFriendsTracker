@@ -38,7 +38,7 @@
    <div class="jumbotron pink text-center" ng-if="vm.privateProfile">
       <p>Oops! It seems your profile is set to <b>private</b>.</p>
    </div>
-   <div class="row" ng-repeat="user in vm.filteredUsers" ng-switch on="$index % 2">
+   <div class="row" ng-repeat="user in vm.filteredUsers" ng-switch on="$index % 2" ng-if="!vm.internalError && !vm.privateProfile">
       <div class="col-md-6" ng-switch-when="0">
          <div class="media border-right">
             <a class="pull-left" href="#">
@@ -57,7 +57,7 @@
             </ul>
          </div>
       </div>
-      <div class="col-md-6" ng-switch-when="0" ng-show="vm.filteredUsers[$index+1]">
+      <div class="col-md-6" ng-switch-when="0" ng-show="vm.filteredUsers[$index+1]" ng-if="!vm.internalError && !vm.privateProfile">
          <div class="media border-right">
             <a class="pull-left" href="#">
             <img class="media-object dp img-circle" ng-src="{{vm.filteredUsers[$index+1].avatarmedium}}" style="width: 100px;height:100px;">

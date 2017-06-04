@@ -230,6 +230,7 @@ app.get('/api/users/changes/:steamid', ensureAuthenticated, function(req, res) {
                                 error: "Profile set to private"
                             });
                         }
+                        console.log(data.friendslist)
                         var currentList = data.friendslist;
                         var mergedJson = currentList.friends.concat(storedList.friends);
                         var currentListAux = {};

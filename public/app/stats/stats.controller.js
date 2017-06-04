@@ -28,6 +28,8 @@
             vm.pairKeyValue1 = [];
             vm.pairKeyValue2 = [];
             vm.users = [];
+            vm.internalError = false;
+            vm.privateProfile = false;
             console.log(dataVAC);
             // -- ADDED FRIENDS BY YEAR CHART --
             ProfilesService.getUserFriendslist(vm.user.steamid)
@@ -116,7 +118,10 @@
 
                 })
                 .catch(function(data) {
-                    //TODO: ERROR HANDLING
+                  if (data.data.error == "Profile set to private") {
+                      vm.privateProfile = true;
+                  }
+                  else vm.internalError = true;
                 });
 
 

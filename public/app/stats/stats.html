@@ -1,11 +1,32 @@
 <style>
-.my-chart {
-width: 175px;
-height: 175px;
-float: right;
-}
+   .pink {
+   background-color: #ffd5d5!important;
+   }
+   /* unvisited link */
+   a:link, a:hover, a:visited {
+   color: white;
+   }
+   .border-right {
+   border-right: 1px solid lightgrey;
+   }
+   .my-chart {
+   width: 175px;
+   height: 175px;
+   float: right;
+   }
 </style>
-<div class="container">
+<div class="jumbotron" ng-if="!vm.isLogged()">
+   <div class="container text-center">
+      <p>Sign in with <b>Steam</b> in order to check any changes in your friendlist!</p>
+   </div>
+</div>
+<div class="jumbotron pink text-center" ng-if="vm.internalError">
+   <p>Oops! Something went <b>wrong.</b></p>
+</div>
+<div class="jumbotron pink text-center" ng-if="vm.privateProfile">
+   <p>Oops! It seems your profile is set to <b>private</b>.</p>
+</div>
+<div class="container" ng-if="vm.isLogged() && !vm.internalError && vm.friendslist">
   <center><h3> Friends Level Average: <span class="label label-primary"> {{ vm.levelAverage }}</span></h3></center>
   <br/><br/>
    <div class="row">
