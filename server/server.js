@@ -80,7 +80,7 @@ app.use(bodyParser.urlencoded({
 app.use(express.static(__dirname + '/public'));
 app.use(serveStatic('D:/GitProjects/SteamFriendsTracker/public'))
 
-mongoose.connect('mongodb://localhost/whodeletedme-db');
+mongoose.connect('mongodb://localhost/steamfriendstracker-db');
 
 // GET /auth/steam
 //   The first step in Steam authentication will involve redirecting
@@ -116,7 +116,6 @@ app.get('/api/identity', ensureAuthenticated, function(req, res) {
 app.get('/api/steam/profile/:steamid', ensureAuthenticated, function(req, res) {
     console.log("GET /api/steam/profile/:steamid");
     var steamids = req.params.steamid;
-
     steam.getPlayerSummaries({
         steamids: steamids,
         callback: function(err, data) {
@@ -276,6 +275,37 @@ app.get('/api/steam/vac/:steamid', function(req, res) {
     var steamids = req.params.steamid;
     steam.getPlayerBans({
         steamids: steamids,
+        callback: function(err, data) {
+            if (err) return res.status(500).json({
+                error: "Steam API call error"
+            });
+            res.status(200).json(data);
+        }
+    })
+});
+
+// GET /api/steam/level
+//    200 - OK. Return the Steam level of the profile given by the steamid
+//    500 - Internal Server Error. Return "Steam API call error"
+app.get('/api/steam/level/:steamid', function(req, res) {
+    console.log("GET /api/steam/inventory/:steamid");
+    var steamid = req.params.steamid;
+    steam.getSteamLevel({
+        steamid: steamid,
+        callback: function(err, data) {
+            if (err) return res.status(500).json({
+                error: "Steam API call error"
+            });
+            res.status(200).json(data);
+        }
+    })
+});
+
+app.get('/api/steam/badge/:steamid', function(req, res) {
+    console.log("GET /api/steam/inventory/:steamid");
+    var steamid = req.params.steamid;
+    steam.getBadges({
+        steamid: steamid,
         callback: function(err, data) {
             if (err) return res.status(500).json({
                 error: "Steam API call error"

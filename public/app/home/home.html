@@ -36,7 +36,7 @@
             <ul>
                <li class="media-body">
                   <h4 class="media-heading">{{user.personaname}}  <small>{{user.steamid}}</small></h4>
-                  <h5><b>Friends since:</b> {{vm.getDateByTimestamp(user.friendSince)}}</h5>
+                  <h5><b>Friends since:</b> {{user.friendsSince | date}}</h5>
                   <hr style="margin:8px auto">
                   <span class="label label-default"><a ng-href="{{user.profileurl}}" target="_blank">Steam Profile</a></span>
                   <span class="label label-primary"><a ng-href="{{user.profileurl}}screenshots" target="_blank">Screenshots</a></span>
@@ -61,7 +61,7 @@
             <ul>
                <li class="media-body">
                   <h4 class="media-heading">{{user.personaname}}  <small>{{user.steamid}}</small></h4>
-                  <h5><b>Friends since:</b> {{vm.getDateByTimestamp(user.friendSince)}}</h5>
+                  <h5><b>Friends since:</b> {{user.friendSince | date}}</h5>
                   <hr style="margin:8px auto">
                   <span class="label label-default"><a ng-href="{{user.profileurl}}" target="_blank">Steam Profile</a></span>
                   <span class="label label-primary"><a ng-href="{{user.profileurl}}screenshots" target="_blank">Screenshots</a></span>

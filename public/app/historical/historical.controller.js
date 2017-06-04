@@ -23,11 +23,11 @@
             vm.isLoadingAdded = true;
             vm.isLoadingRemoved = true;
             vm.noHistorical = false;
+            var steamIdsArray = [];
             var i = 0;
             var j = 0;
             //User with no historical
             if (!vm.user.historical) {
-                console.log("User with no historical.")
                 vm.noHistorical = true;
                 vm.emptyArrays = true;
                 //We set the historical var in order to display "0"s
@@ -36,27 +36,27 @@
                     "deletedFriends": []
                 }
                 vm.user.historical = historical;
-
             }
             //If empty array
             else if (vm.user.historical.addedFriends.length < 1 && vm.user.historical.deletedFriends < 1) {
-                console.log("Empty arrays.")
                 vm.emptyArrays = true;
             }
             else {
-                console.log("Added Friends Promises...")
-                var promises = [];
                 angular.forEach(vm.user.historical.addedFriends, function(user) {
-                    promises.push(ProfilesService.getFriendProfile(user.steamid));
+                    steamIdsArray.push(user.steamid);
                     vm.addedFriendSinceArray[i] = new Date(getDateByTimestamp(user.friend_since));
                     i++;
                 })
-                var i = 0;
-                $q.all(promises).then(function(response) {
-                        response.forEach(function(response) {
-                            vm.addedProfiles[i] = response.data.response.players[0];
-                            vm.addedProfiles[i]['friendsSince'] = vm.addedFriendSinceArray[i]
-                            i++;
+                i = 0;
+                ProfilesService.getFriendProfile(steamIdsArray)
+                    .then(function(response) {
+                        vm.addedProfiles = response.data.response.players;
+                        vm.addedProfiles.sort(function(a, b) {
+                            return a.steamid - b.steamid;
+                        });
+                        angular.forEach(vm.addedProfiles, function(user) {
+                            vm.addedProfiles[i]['friendsSince'] = vm.addedFriendSinceArray[i];
+                            i++
                         })
                         vm.addedFriendsTable = new NgTableParams({
                             count: 10
@@ -64,26 +64,31 @@
                             dataset: vm.addedProfiles,
                             counts: [5, 10, 20]
                         });
+                        console.log(vm.addedProfiles)
                         vm.isLoadingAdded = false;
-
                     })
                     .catch(function(data) {
                         vm.internalError = true;
                     });
 
-                console.log("Removed Friends Promises...")
-                var promises = [];
+                steamIdsArray = [];
+
                 angular.forEach(vm.user.historical.deletedFriends, function(user) {
-                    promises.push(ProfilesService.getFriendProfile(user.steamid));
+                    steamIdsArray.push(user.steamid);
+                    //vm.friendSinceArray[i] = getDateByTimestamp(user.friend_since);
                     vm.deletedFriendSinceArray[j] = new Date(getDateByTimestamp(user.friend_since));
                     j++;
                 })
-                var j = 0;
-                $q.all(promises).then(function(response) {
-                        response.forEach(function(response) {
-                            vm.deletedProfiles[j] = response.data.response.players[0];
-                            vm.deletedProfiles[j]['friendsSince'] = vm.deletedFriendSinceArray[j]
-                            j++;
+                j = 0;
+                ProfilesService.getFriendProfile(steamIdsArray)
+                    .then(function(response) {
+                        vm.deletedProfiles = response.data.response.players;
+                        vm.deletedProfiles.sort(function(a, b) {
+                            return a.steamid - b.steamid;
+                        });
+                        angular.forEach(response.data.response.players, function(user) {
+                            vm.deletedProfiles[j]['friendsSince'] = vm.deletedFriendSinceArray[j];
+                            j++
                         })
                         vm.removedFriendsTable = new NgTableParams({
                             count: 10
@@ -91,8 +96,8 @@
                             dataset: vm.deletedProfiles,
                             counts: [5, 10, 20]
                         });
+                        console.log(vm.deletedProfiles)
                         vm.isLoadingRemoved = false;
-
                     })
                     .catch(function(data) {
                         vm.internalError = true;

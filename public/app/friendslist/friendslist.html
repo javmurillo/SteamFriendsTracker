@@ -28,11 +28,7 @@
       <input type="text" class="form-control" placeholder="Insert Username, SteamID, or Date" ng-model="vm.search" ng-change="vm.filter(vm.search)">
       <br/>
       <div align="right">
-        <!-- <select ng-model="myModel"
-             ng-options="record.id as record.value for record in vm.records" ng-change=vm.sort(myModel)>
-           <option value=''>- Sorty By -</option>
-        </select> -->
-          <select ng-init="item = sizes[0]" ng-options="size as size.name for size in sizes " ng-model="item" ng-change="vm.sort(item)" class="form-control" id="exampleSelect1" style="width:15%"></select>
+          <select ng-init="item = vm.options[0]" ng-options="option as option.name for option in vm.options " ng-model="item" ng-change="vm.sort(item)" class="form-control" style="width:15%"></select>
       </div>
    </div>
    <br/><br/>

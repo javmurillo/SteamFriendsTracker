@@ -33,6 +33,9 @@
             vm.privateProfile = false;
             var i = 0;
             var j = 0;
+            //We could avoid calling our Server multiple times by passing an array with
+            //all the friend's steamids (like Friendslist or Historical), in
+            //this way, we improve the code legibility without a real impact in the performance.
             ProfilesService.getUserChanges(vm.user.steamid).then(function(response) {
                     vm.changes = response.data;
                     if (vm.changes.addedFriends.length < 1 && vm.changes.deletedFriends.length < 1) {
@@ -42,7 +45,7 @@
                             ProfilesService.getFriendProfile(user.steamid)
                                 .then(function(response) {
                                     vm.addedProfiles[i] = response.data.response.players[0];
-                                    vm.addedProfiles[i]['friendSince'] = user.friend_since;
+                                    vm.addedProfiles[i]['friendSince'] = vm.getDateByTimestamp(user.friend_since);
                                     i++;
                                 })
                                 .catch(function(data) {

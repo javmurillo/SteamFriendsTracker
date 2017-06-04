@@ -26,6 +26,10 @@
             return $http.get("/api/steam/vac/" + steamids, { cache: cache  });
         };
 
+        vm.getFriendLevel = function(steamid) {
+            return $http.get("/api/steam/level/" + steamid, { cache: cache  });
+        };
+
         vm.updateUser = function(steamid, historical) {
             var data = {steamid: steamid, historical: historical};
             //$http.defaults.headers.patch["Content-Type"] = "application/json";
@@ -33,7 +37,7 @@
         };
 
         vm.getDateByTimestamp = function(timestamp) {
-            var a = new Date(timestamp * 1000);
+              var a = new Date(timestamp * 1000);
              var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
              var year = a.getFullYear();
              var month = months[a.getMonth()];

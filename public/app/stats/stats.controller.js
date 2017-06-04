@@ -18,9 +18,13 @@
             var steamIdsArray = []
             var labelsAux = [];
             var labelsAux2 = [];
+            var labelsAux3 = [];
             var dataAux = [];
             var dataAux2 = [];
+            var dataAux3 = [];
             var dataVAC = [0];
+            var totalLevel = 0;
+            vm.levelAverage = "Loading...";
             vm.pairKeyValue1 = [];
             vm.pairKeyValue2 = [];
             vm.users = [];
@@ -48,7 +52,7 @@
                           "data": dataAux,
                           "labels": labelsAux
                     };
-
+                    //ACCOUNTS AGE BY YEAR
                     ProfilesService.getFriendProfile(steamIdsArray).then(function(response) {
                             angular.forEach(response.data.response.players, function(user) {
                                 var date = new Date(user.timecreated * 1000);
@@ -73,7 +77,9 @@
                             vm.internalError = true;
                         });
 
+                    //VAC'D FRIENDS
                     ProfilesService.getVacInfo(steamIdsArray).then(function(response) {
+                      console.log(response);
                             angular.forEach(response.data.players, function(user) {
                               if (user.VACBanned) {
                                 dataVAC[0]++;
@@ -84,11 +90,29 @@
                                   "data": dataVAC,
                                   "labels": ['VAC Friends', 'Nice friends'],
                                   "colours": ['#E31B54','#5BC99D']
-                                };
+                            };
                         })
                         .catch(function(data) {
                             vm.internalError = true;
                         });
+
+                  angular.forEach(steamIdsArray, function(steamid) {
+                        promises.push(ProfilesService.getFriendLevel(steamid));
+                    })
+                    $q.all(promises).then(function(response) {
+
+                        angular.forEach(response, function(response) {
+                           totalLevel = totalLevel + response.data.response.player_level;
+                          console.log(totalLevel);
+                          //console.log(response);
+                        })
+                        vm.levelAverage = 0;
+                        vm.levelAverage = (totalLevel/vm.friendslist.length).toFixed(2);
+                    })
+                    .catch(function(data) {
+                        vm.internalError = true;
+                    });
+
 
                 })
                 .catch(function(data) {
