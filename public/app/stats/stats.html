@@ -17,7 +17,7 @@
 </style>
 <div class="jumbotron" ng-if="!vm.isLogged()">
    <div class="container text-center">
-      <p>Sign in with <b>Steam</b> in order to check any changes in your friendlist!</p>
+      <p>Sign in with <b>Steam</b> in order to check any changes in your friendslist!</p>
    </div>
 </div>
 <div class="jumbotron pink text-center" ng-if="vm.internalError">
@@ -44,15 +44,12 @@
          <canvas id="bar" class="chart chart-bar"
             chart-data="vm.accountsAgeByYearChart.data" chart-labels="vm.accountsAgeByYearChart.labels">
          </canvas>
-
       </div>
       <div class="col-md-4">
         <center>
           <h3>VAC'd Friends</h3>
         </center>
         <canvas style='width:200px;height:100px' id="doughnut" class="chart chart-doughnut" chart-data="vm.vacChart.data" chart-labels="vm.vacChart.labels" chart-colors="vm.vacChart.colours"></canvas>
-
       </div>
    </div>
-
 </div>

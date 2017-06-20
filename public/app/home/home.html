@@ -12,11 +12,45 @@
    .border-right {
    border-right: 1px solid lightgrey;
    }
+   .glyphicon.glyphicon-floppy-open {
+    font-size: 75px;
+    }
+   .glyphicon.glyphicon-duplicate {
+     font-size: 75px;
+     }
+     .glyphicon.glyphicon-eye-open {
+      font-size: 75px;
+      }
+      p {
+    padding-top: 20px;
+}
 </style>
-<div class="jumbotron" ng-if="!vm.isLogged()">
+<div class="container" ng-if="!vm.isLogged()">
+<div class="jumbotron">
    <div class="container text-center">
-      <p>Sign in with <b>Steam</b> in order to check any changes in your friendlist!</p>
+      <p>Sign in with <b>Steam</b> in order to check any changes in your friendslist!</p>
    </div>
+</div>
+<div class="row">
+  <div class="col-md-4">
+    <div class="jumbotron" style="text-align: center;">
+      <span class="glyphicon glyphicon-floppy-open"></span>
+      <p>SteamFriendsTracker <strong>saves your friendslist</strong> the first time you log in.</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="jumbotron" style="text-align: center;">
+      <span class="glyphicon glyphicon-duplicate"></span>
+      <p>Your current friendslist is <strong>compared</strong> with the stored one.</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="jumbotron" style="text-align: center;">
+      <span class="glyphicon glyphicon-eye-open"></span>
+      <p><strong>Changes are displayed</strong>, and the stored friendslist is updated.</p>
+    </div>
+  </div>
+</div>
 </div>
 <!--<center><h1>Welcome back {{vm.user.displayName}}</h1>   </center> -->
 <div class="container" ng-if="vm.isLogged()">
