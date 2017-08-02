@@ -9,6 +9,10 @@
    .border-right {
    border-right: 1px solid lightgrey;
    }
+   /*Avoid elements to shift!*/
+   html {
+   overflow-y: scroll;
+   }
 </style>
 <div class="jumbotron" ng-if="!vm.isLogged()">
    <div class="container text-center">
@@ -28,7 +32,7 @@
       <input type="text" class="form-control" placeholder="Insert Username, SteamID, or Date" ng-model="vm.search" ng-change="vm.filter(vm.search)">
       <br/>
       <div align="right">
-          <select ng-init="item = vm.options[0]" ng-options="option as option.name for option in vm.options " ng-model="item" ng-change="vm.sort(item)" class="form-control" style="width:15%"></select>
+         <select ng-init="item = vm.options[0]" ng-options="option as option.name for option in vm.options " ng-model="item" ng-change="vm.sort(item)" class="form-control" style="width:15%"></select>
       </div>
    </div>
    <br/><br/>
@@ -79,17 +83,17 @@
    </div>
 </div>
 <footer>
-    <div class="navbar navbar-inverse navbar-fixed-bottom">
-        <div class="container">
-          <span class="navbar-text">
-            <label style="color: white">2017, SteamFriendsTracker</label>
-            <br/>
-            This site is not affiliated with Valve, Steam, or any of their partners. All copyrights reserved to their respective owners.
-          </span>
-          <div class="nav navbar-nav navbar-right">
+   <div class="navbar navbar-inverse navbar-fixed-bottom">
+      <div class="container">
+         <span class="navbar-text">
+         <label style="color: white">2017, SteamFriendsTracker</label>
+         <br/>
+         This site is not affiliated with Valve, Steam, or any of their partners. All copyrights reserved to their respective owners.
+         </span>
+         <div class="nav navbar-nav navbar-right">
             <span class="navbar-text" style="color: white">
-              created by SoumyDev ♜
-            </div>
+            created by SoumyDev ♜
+         </div>
       </div>
-    </div>
+   </div>
 </footer>

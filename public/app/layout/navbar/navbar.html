@@ -6,56 +6,56 @@
    }
 </style>
 <script>
-    $(".nav li").on("click", function() {
-      $(".nav li").removeClass("active");
-      $(this).addClass("active");
-    });
+   $(".nav li").on("click", function() {
+     $(".nav li").removeClass("active");
+     $(this).addClass("active");
+   });
 </script>
 <nav class="navbar navbar-inverse navbar-fixed-top">
-     <div class="container" ng-switch on="vm.isLogged()">
-          <div class="navbar-header">
+   <div class="container" ng-switch on="vm.isLogged()">
+      <div class="navbar-header">
          <a ui-sref="home" class="navbar-brand"  ng-click="isCollapsed=true"><span class="brand-title">{{vm.navline.title}}</span></a>
-          </div>
-          <ul class="nav navbar-nav">
-            <li class="active">
-               <a ui-sref="home" id="home">
-               <span class="glyphicon glyphicon-home"></span>&nbsp;
-               <span>Home</span>
-               </a>
-            </li>
-            <li>
-               <a ui-sref="friendslist" id="friendslist" ng-switch-when="true">
-               <span class="glyphicon glyphicon-list"></span>&nbsp;
-               <span>Friendslist</span>
-               </a>
-            </li>
-            <li>
-               <a ui-sref="historical" id="historical" ng-switch-when="true">
-               <span class="glyphicon glyphicon-time"></span>&nbsp;
-               <span>Historical</span>
-               </a>
-            </li>
-            <li>
-               <a ui-sref="stats" id="stats" ng-switch-when="true">
-               <span class="glyphicon glyphicon glyphicon-stats"></span>&nbsp;
-               <span>Stats</span>
-               </a>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li><img class="navbar-form" src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png" ng-click="vm.loginRedirect()" ng-switch-when="false"></li>
-            <li class="dropdown" ng-switch-when="true">
-               <a class="dropdown-toggle" data-toggle="dropdown" href="#">Logged in as {{vm.user.displayName}}<span class="caret"></span></a>
-               <ul class="dropdown-menu">
-                 <li>
-                    <a ng-click="vm.logoutRedirect()" id="logout">
-                    <span class="glyphicon glyphicon-log-out"></span>&nbsp;
-                    <span>Logout</span>
-                    </a>
-                 </li>
-               </ul>
-            </li>
-            <li><img class="navbar-form" ng-src="{{vm.user.photos[0].value}}" ng-switch-when="true"/></li>
-          </ul>
-    </div>
+      </div>
+      <ul class="nav navbar-nav">
+         <li class="active">
+            <a ui-sref="home" id="home">
+            <span class="glyphicon glyphicon-home"></span>&nbsp;
+            <span>Home</span>
+            </a>
+         </li>
+         <li>
+            <a ui-sref="friendslist" id="friendslist" ng-switch-when="true">
+            <span class="glyphicon glyphicon-list"></span>&nbsp;
+            <span>Friendslist</span>
+            </a>
+         </li>
+         <li>
+            <a ui-sref="historical" id="historical" ng-switch-when="true">
+            <span class="glyphicon glyphicon-time"></span>&nbsp;
+            <span>Historical</span>
+            </a>
+         </li>
+         <li>
+            <a ui-sref="stats" id="stats" ng-switch-when="true">
+            <span class="glyphicon glyphicon glyphicon-stats"></span>&nbsp;
+            <span>Stats</span>
+            </a>
+         </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+         <li><img class="navbar-form" src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png" ng-click="vm.loginRedirect()" ng-switch-when="false"></li>
+         <li class="dropdown" ng-switch-when="true">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Logged in as {{vm.user.displayName}}<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+               <li>
+                  <a ng-click="vm.logoutRedirect()" id="logout">
+                  <span class="glyphicon glyphicon-log-out"></span>&nbsp;
+                  <span>Logout</span>
+                  </a>
+               </li>
+            </ul>
+         </li>
+         <li><img class="navbar-form" ng-src="{{vm.user.photos[0].value}}" ng-switch-when="true"/></li>
+      </ul>
+   </div>
 </nav>
