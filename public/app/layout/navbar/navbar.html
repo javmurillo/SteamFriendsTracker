@@ -14,8 +14,14 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
    <div class="container" ng-switch on="vm.isLogged()">
       <div class="navbar-header">
-         <a ui-sref="home" class="navbar-brand"  ng-click="isCollapsed=true"><span class="brand-title">{{vm.navline.title}}</span></a>
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+      </button>
+         <a ui-sref="home" class="navbar-brand"><span class="brand-title">{{vm.navline.title}}</span></a>
       </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
          <li class="active">
             <a ui-sref="home" id="home">
@@ -57,5 +63,6 @@
          </li>
          <li><img class="navbar-form" ng-src="{{vm.user.photos[0].value}}" ng-switch-when="true"/></li>
       </ul>
+      </div>
    </div>
 </nav>
