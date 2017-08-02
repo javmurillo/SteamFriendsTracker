@@ -91,6 +91,7 @@ app.get('/auth/steam',
             failureRedirect: '/'
         },
         function(req, res) {
+        //  if (!res) { console.log("udefineddd")}
             res.redirect('/');
         }));
 
