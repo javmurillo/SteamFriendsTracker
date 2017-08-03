@@ -273,7 +273,7 @@ app.get('/api/users/changes/:steamid', ensureAuthenticated, function(req, res) {
 //    200 - OK. Return the VAC info of the profiles given by the steamid(s)
 //    500 - Internal Server Error. Return "Steam API call error"
 app.get('/api/steam/vac/:steamid', function(req, res) {
-    console.log("GET /api/steam/inventory/:steamid");
+    console.log("GET /api/steam/vac/:steamid");
     var steamids = req.params.steamid;
     steam.getPlayerBans({
         steamids: steamids,
@@ -290,7 +290,7 @@ app.get('/api/steam/vac/:steamid', function(req, res) {
 //    200 - OK. Return the Steam level of the profile given by the steamid
 //    500 - Internal Server Error. Return "Steam API call error"
 app.get('/api/steam/level/:steamid', function(req, res) {
-    console.log("GET /api/steam/inventory/:steamid");
+    console.log("GET /api/steam/level/:steamid");
     var steamid = req.params.steamid;
     steam.getSteamLevel({
         steamid: steamid,
@@ -304,7 +304,7 @@ app.get('/api/steam/level/:steamid', function(req, res) {
 });
 
 app.get('/api/steam/badge/:steamid', function(req, res) {
-    console.log("GET /api/steam/inventory/:steamid");
+    console.log("GET /api/steam/badge/:steamid");
     var steamid = req.params.steamid;
     steam.getBadges({
         steamid: steamid,
