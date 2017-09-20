@@ -92,7 +92,10 @@ app.get('/auth/steam',
         },
         function(req, res) {
         //  if (!res) { console.log("udefineddd")}
+        try {
             res.redirect('/');
+          }
+          catch(err) { console.log("Maintenance"); }
         }));
 
 // GET /logout
@@ -123,6 +126,7 @@ app.get('/api/steam/profile/:steamid', ensureAuthenticated, function(req, res) {
             if (err) return res.status(500).json({
                 error: "Steam API call error"
             });
+            console.log(data);
             res.status(200).json(data);
         }
     })
