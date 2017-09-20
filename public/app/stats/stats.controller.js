@@ -30,12 +30,10 @@
             vm.users = [];
             vm.internalError = false;
             vm.privateProfile = false;
-            console.log(dataVAC);
             // -- ADDED FRIENDS BY YEAR CHART --
             ProfilesService.getUserFriendslist(vm.user.steamid)
                 .then(function(response) {
                     vm.friendslist = response.data.friendslist.friends;
-                    console.log(vm.friendslist.length);
                     vm.friendslist.forEach(function(user) {
                         var date = new Date(user.friend_since * 1000);
                         var year = date.getFullYear();
@@ -81,7 +79,6 @@
 
                     //VAC'D FRIENDS
                     ProfilesService.getVacInfo(steamIdsArray).then(function(response) {
-                      console.log(response);
                             angular.forEach(response.data.players, function(user) {
                               if (user.VACBanned) {
                                 dataVAC[0]++;
@@ -105,8 +102,6 @@
 
                         angular.forEach(response, function(response) {
                            totalLevel = totalLevel + response.data.response.player_level;
-                          console.log(totalLevel);
-                          //console.log(response);
                         })
                         vm.levelAverage = 0;
                         vm.levelAverage = (totalLevel/vm.friendslist.length).toFixed(2);

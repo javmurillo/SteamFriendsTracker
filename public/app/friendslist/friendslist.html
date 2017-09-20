@@ -32,7 +32,7 @@
       <input type="text" class="form-control" placeholder="Insert Username, SteamID, or Date" ng-model="vm.search" ng-change="vm.filter(vm.search)">
       <br/>
       <div align="right">
-         <select ng-init="item = vm.options[0]" ng-options="option as option.name for option in vm.options " ng-model="item" ng-change="vm.sort(item)" class="form-control" style="width:15%"></select>
+         <select ng-options="option as option.name for option in vm.options " ng-model="item" ng-change="vm.sort(item)" class="form-control" style="width:15%"></select>
       </div>
    </div>
    <br/><br/>
