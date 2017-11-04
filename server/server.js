@@ -343,7 +343,7 @@ app.all('/*', function(req, res, next) {
 });
 
 
-app.listen(3000);
+app.listen(3001);
 
 // Simple route middleware to ensure user is authenticated.
 function ensureAuthenticated(req, res, next) {
