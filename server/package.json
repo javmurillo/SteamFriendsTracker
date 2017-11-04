@@ -6,7 +6,7 @@
   "description": "Simple WebApp using the Steam Web API",
   "license": "MIT",
   "engines": {
-    "node": "6.10.3"
+    "node": "6.11.4"
   },
   "scripts": {
     "start": "node ./server.js"
